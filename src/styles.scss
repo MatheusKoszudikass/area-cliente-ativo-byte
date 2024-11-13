@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+.default-body {
+    overflow-x: hidden;
+}
+
+.login-body {
+    height: 100vh; /* Ocupa toda a altura da tela */
+    margin: 0; /* Remove margens padrão */
+    display: flex; /* Usando Flexbox para centralização */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    background-color: #c9d6ff;
+    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+}
+.welcome-body {
+    overflow-x: hidden;
+}
+
+

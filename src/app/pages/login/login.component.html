@@ -1,0 +1,38 @@
+<section>
+    <div class="container" id="container">
+        <div class="form-container sign-in">
+            <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+                <h1>Login</h1>
+                <span>Utilize seu e-mail e senha</span>
+                <input type="email" placeholder="E-mail" [(ngModel)]="loginObj.email_userName" name="email" required>
+                <input type="password" placeholder="Senha" [(ngModel)]="loginObj.password" name="password" required>
+                <label nz-checkbox [(ngModel)]="loginObj.remember" name="remember">Lembrar</label>
+                <button nz-button  [disabled]="!loginForm.valid" (click)="AttPage()" [nzLoading]="isLoadingOne">Entrar</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-up">
+            <form>
+                <h1>Recuperação de acesso</h1>
+                <span>Informe seu e-mail para recuperar seu acesso.</span>
+                <input type="email" placeholder="E-mail" (input)="loginObj.email_userName" name="email" required>
+                <button nz-button  [disabled]="!loginForm.valid" (click)="AttPage()" [nzLoading]="isLoadingOne">Recuperar</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel  toggle-left">
+                    <img [src]="logoUrl" alt="">    
+                    <h1>Seja bem vindo</h1>
+                    <button class="hidden" id="login" (click)="getToggle('login')">Acessar</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <img [src]="logoUrl" alt="">
+                    <h1>Seja Bem-Vindo!</h1>
+                    <p>Área do cliente</p>
+                    <button class="hidden" id="register" (click)="getToggle('register')">Esqueceu seu acesso?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
