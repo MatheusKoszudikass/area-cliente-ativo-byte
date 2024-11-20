@@ -1,5 +1,5 @@
 export interface ResponseLogin {
-    success: boolean;
+    status: boolean;
     message: string;
     duration: number;
     data: string[]; 

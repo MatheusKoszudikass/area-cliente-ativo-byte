@@ -14,5 +14,7 @@ import { provideHttpClient } from '@angular/common/http';
 registerLocaleData(pt);
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideNzIcons(icons), provideNzI18n(pt_BR), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient()]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
+    provideRouter(routes), provideNzIcons(icons), provideNzI18n(pt_BR),
+    importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient()]
 };

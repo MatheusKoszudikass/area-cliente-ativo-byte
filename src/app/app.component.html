@@ -1,6 +1,12 @@
 
-@if(!isAuthenticated) {
-   <app-login></app-login>
+@if(isLoading) {
+   <div class="loading-screen">
+    <div class="spinner"></div>
+    <p>Validando seus dados</p>
+    <p>Aguarde...</p>
+   </div>
+}@else if (!isAuthenticated || isLoading) {
+    <app-login/>
 }@else {
 <nz-layout class="app-layout" #mainContent>
     <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
