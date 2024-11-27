@@ -1,22 +1,25 @@
 import { Component, Inject } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { FormsModule, NgForm } from '@angular/forms';
+import {  NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CreateLogin } from '../../interfaces/create-login.interface';
 import { DOCUMENT } from '@angular/common'
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, NzButtonModule, NzFormModule, NzFormModule, NzCheckboxModule, NzInputModule, NzIconModule, FormsModule],
+  imports: [NzButtonModule,
+    NzCheckboxModule, NzInputModule, NzIconModule, NzAlertModule,
+  ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
+
 export class LoginComponent {
 
   isButtonDisabled = false;
@@ -32,15 +35,29 @@ export class LoginComponent {
     menssage: ''
   };
 
-  constructor(private router: Router, public authService: AuthService,
-    @Inject(DOCUMENT) private document: Document) { this.router.navigate(['/login']); }
+  validateForm;
 
+  constructor(private router: Router, public authService: AuthService,
+    @Inject(DOCUMENT) private document: Document, private fb: NonNullableFormBuilder) {
+
+      this.validateForm = this.fb.group({
+        username: this.fb.control('', [Validators.required]),
+        password: this.fb.control('', [Validators.required]),
+        remember: this.fb.control(true)
+      });
+    }
+
+    
   async onLogin() {
-    const response = await this.authService.login(this.loginObj);
+    this.loginObj.email_userName = this.validateForm.value.username ?? '';
+    this.loginObj.password = this.validateForm.value.password ?? '';
+    this.loginObj.remember = this.validateForm.value.remember ?? false;
+    
+    return await this.authService.login(this.loginObj);
   }
 
   async verifyTokenJWT() {
-    const result = await this.authService.isVerifyToken();
+    const result = await this.authService.isAuthenticated();
   }
   getToggle(action: string) {
     const container = document.getElementById('container') as HTMLElement;
@@ -52,22 +69,26 @@ export class LoginComponent {
     }
   }
 
-  async AttPage(form: NgForm) {
+  async AttPage(): Promise<void> {
     this.isLoadingOne = true;
     this.isButtonDisabled = true;
 
+
     try {
       // Simula a chamada do método login
-      if (form.valid) {
-        await this.onLogin();
-      }
+        const response = await this.onLogin();
+        if(response.status)
+        {
+          setTimeout(() => {
+            this.isLoadingOne = false;
+            this.isButtonDisabled = false;
+            window.location.reload();
+          }, 500); // Tempo adicional fixo para garantir transições suaves
+        }else {
+          this.isLoadingOne = false;
+        }
     } finally {
 
-      setTimeout(() => {
-        this.isLoadingOne = false;
-        this.isButtonDisabled = false;
-        window.location.reload();
-      }, 500); // Tempo adicional fixo para garantir transições suaves
     }
   }
 }
