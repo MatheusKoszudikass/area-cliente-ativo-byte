@@ -18,7 +18,7 @@ import { LOGIN_ROUTES } from './pages/login/login.routes';
 export class AppComponent {
   isCollapsed = false;
   isLoading = true;
-  isAuthenticated = false;
+  isAuthenticated: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -26,23 +26,10 @@ export class AppComponent {
     // Lógica de autenticação
     document.body.className = '';
 
-       this.isAuthenticated = await this.authService.isAuthenticated();
+    this.isAuthenticated = await this.authService.isAuthenticated();
 
-      if (this.isAuthenticated) {
-        this.isLoading = false
-      } else {
-        this.authService.logout();
-        this.isAuthenticated = false;
-        this.isLoading = false
-      }
-
-    // Limpa as classes do body ao inicializar
-
-    // Verifica se o usuário está autenticado
-    if (!this.isAuthenticated) {
-      document.body.classList.add('login-body'); // Adiciona classe para login
-    } else {
-      // Se autenticado, define a classe padrão ou específica para rotas
+    if (this.isAuthenticated) {
+      this.isLoading = false
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
           document.body.className = ''; // Limpa as classes do body
@@ -55,10 +42,10 @@ export class AppComponent {
           }
         }
       });
-    }
-  }
 
-  redirectToLogin() {
-    this.router.navigate(['/login']);
+    } else {
+      this.isLoading = false
+      document.body.classList.add('login-body'); // Adiciona classe para login
+    }
   }
 }
