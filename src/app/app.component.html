@@ -5,7 +5,7 @@
     <p>Validando seus dados</p>
     <p>Aguarde...</p>
    </div>
-}@else if (!isAuthenticated || isLoading) {
+}@else if (!this.isAuthenticated && !this.isLoading) {
     <app-login/>
 }@else {
 <nz-layout class="app-layout" #mainContent>
