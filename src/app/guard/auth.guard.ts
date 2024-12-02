@@ -2,19 +2,28 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
+
+/**
+ * Route guard that checks if the user is authenticated.
+ * If authenticated, navigation is allowed.
+ * If not, the user is redirected to the login page and navigation is blocked.
+ * 
+ * @param route - The route that is being accessed.
+ * @param state - The state of the router.
+ * @returns A Promise that resolves to true if the user is authenticated, 
+ *          otherwise resolves to false after redirecting to login.
+ */
+
+export const authGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
-  const authService =  inject(AuthService);
-  var auth: boolean = false;
+  const authService = inject(AuthService);
 
-  authService.isAuthenticated().then((isAuthenticated) => {
-    if (isAuthenticated) {
-       router.navigate(['/welcome'])
-      auth = true;
-    } else {
-      router.navigate(['/login']);
-    }
-  });
+  const isAuthenticated = await authService.isAuthenticated();
 
-  return auth;
+  if (isAuthenticated == true) {
+      return true;
+  } else {
+    router.navigate(['/login']);
+    return false; // Bloqueia a navegação
+  }
 };

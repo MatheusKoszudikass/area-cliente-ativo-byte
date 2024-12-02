@@ -20,6 +20,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
   styleUrl: './login.component.scss'
 })
 
+
 export class LoginComponent {
 
   isButtonDisabled = false;
@@ -37,6 +38,12 @@ export class LoginComponent {
 
   validateForm;
 
+  /**
+   * @param router - The router to navigate
+   * @param authService - The auth service to check if the user is logged in
+   * @param document - The document to get the url of the current page
+   * @param fb - The form builder to create the form
+   */
   constructor(private router: Router, public authService: AuthService,
     @Inject(DOCUMENT) private document: Document, private fb: NonNullableFormBuilder) {
 
@@ -47,6 +54,11 @@ export class LoginComponent {
       });
     }
 
+  /**
+   * Performs the login operation, gathering the values from the form and
+   * passing them to the auth service to perform the login.
+   * @returns A promise that resolves to the response from the login operation.
+   */
     
   async onLogin() {
     this.loginObj.email_userName = this.validateForm.value.username ?? '';
@@ -56,9 +68,21 @@ export class LoginComponent {
     return await this.authService.login(this.loginObj);
   }
 
+  /**
+   * Verifies if the user is authenticated by checking if the token is valid.
+   * Calls the auth service to check if the token is valid.
+   * @returns A promise that resolves to a boolean indicating if the user is authenticated.
+   */
+
   async verifyTokenJWT() {
     const result = await this.authService.isAuthenticated();
   }
+  
+  /**
+   * Toggles the class 'active' on the container element, depending on the action passed as parameter.
+   * If the action is 'register', the class 'active' is added. If the action is 'login', the class 'active' is removed.
+   * @param action - The action to be performed on the container element.
+   */
   getToggle(action: string) {
     const container = document.getElementById('container') as HTMLElement;
 
@@ -69,21 +93,29 @@ export class LoginComponent {
     }
   }
 
+/**
+ * Initiates the login process and handles UI state during the operation.
+ * Sets loading and button state to indicate an ongoing process.
+ * Calls the onLogin method to attempt user login.
+ * On successful login, navigates to the home page after a delay for smooth transition.
+ * Resets loading and button state based on the outcome of the login process.
+ * @returns A promise that resolves once the navigation or error handling is complete.
+ */
+
   async AttPage(): Promise<void> {
     this.isLoadingOne = true;
     this.isButtonDisabled = true;
 
-
     try {
-      // Simula a chamada do método login
+
         const response = await this.onLogin();
-        if(response.status)
+        if(response)
         {
           setTimeout(() => {
             this.isLoadingOne = false;
             this.isButtonDisabled = false;
-            window.location.reload();
-          }, 500); // Tempo adicional fixo para garantir transições suaves
+            this.router.navigate(['/home']);
+          }, 500);
         }else {
           this.isLoadingOne = false;
         }

@@ -5,6 +5,22 @@
     font-family: 'Poppins', sans-serif;
 }
 
+:host {
+    display: flex;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    height: 100vh; /* Ocupa toda a altura da tela */
+    width: 100%;
+    margin: 0; /* Remove margens padrão */
+    display: flex; /* Usando Flexbox para centralização */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    background-color: #c9d6ff;
+    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+  }
+
 .container {
     background-color: #fff;
     border-radius: 30px;
