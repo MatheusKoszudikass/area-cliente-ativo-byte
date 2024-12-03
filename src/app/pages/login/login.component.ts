@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import {  NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -20,10 +20,9 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
   styleUrl: './login.component.scss'
 })
 
-
 export class LoginComponent {
 
-  isButtonDisabled = false;
+  isButtonDisabled: boolean = false;
   passwordVisible: boolean = false;
   isLoadingOne: boolean = false;
   logoUrl: string = '/img/login/Ativo Byte.gif';
@@ -36,7 +35,8 @@ export class LoginComponent {
     menssage: ''
   };
 
-  validateForm;
+  formValidadeLogin;
+  formValidadeRecoveryAccount;
 
   /**
    * @param router - The router to navigate
@@ -47,10 +47,14 @@ export class LoginComponent {
   constructor(private router: Router, public authService: AuthService,
     @Inject(DOCUMENT) private document: Document, private fb: NonNullableFormBuilder) {
 
-      this.validateForm = this.fb.group({
+      this.formValidadeLogin = this.fb.group({
         username: this.fb.control('', [Validators.required]),
         password: this.fb.control('', [Validators.required]),
         remember: this.fb.control(true)
+      });
+
+      this.formValidadeRecoveryAccount = this.fb.group({
+        email: this.fb.control('', [Validators.required, Validators.email])
       });
     }
 
@@ -61,21 +65,11 @@ export class LoginComponent {
    */
     
   async onLogin() {
-    this.loginObj.email_userName = this.validateForm.value.username ?? '';
-    this.loginObj.password = this.validateForm.value.password ?? '';
-    this.loginObj.remember = this.validateForm.value.remember ?? false;
-    
+    this.loginObj.email_userName = this.formValidadeLogin.value.username ?? '';
+    this.loginObj.password = this.formValidadeLogin.value.password ?? '';
+    this.loginObj.remember = this.formValidadeLogin.value.remember ?? false;
+
     return await this.authService.login(this.loginObj);
-  }
-
-  /**
-   * Verifies if the user is authenticated by checking if the token is valid.
-   * Calls the auth service to check if the token is valid.
-   * @returns A promise that resolves to a boolean indicating if the user is authenticated.
-   */
-
-  async verifyTokenJWT() {
-    const result = await this.authService.isAuthenticated();
   }
   
   /**
@@ -102,7 +96,7 @@ export class LoginComponent {
  * @returns A promise that resolves once the navigation or error handling is complete.
  */
 
-  async AttPage(): Promise<void> {
+  public async initiateLogin(): Promise<void> {
     this.isLoadingOne = true;
     this.isButtonDisabled = true;
 
@@ -123,4 +117,30 @@ export class LoginComponent {
 
     }
   }
+
+/**
+ * Initiates the account recovery process and handles UI state during the operation.
+ * Sets loading and button state to indicate an ongoing process.
+ * Extracts the email from the recovery form and calls the auth service to attempt account recovery.
+ * On receiving a response, it resets the loading and button state after a delay for user feedback.
+ */
+
+  public async initiateRecoveryAccount(): Promise<void> {
+    this.isLoadingOne = true;
+    this.isButtonDisabled = true;
+
+    this.loginObj.email_userName = this.formValidadeRecoveryAccount.value.email ?? '';
+    
+    const response = await this.authService.recoveryAccount(this.loginObj);
+
+    if(response){
+      setTimeout(() => {
+        this.isLoadingOne = false;
+        this.isButtonDisabled = false;
+      }, 500);
+    }
+
+    this.isLoadingOne = false;
+    this.isButtonDisabled = false;
+  } 
 }
