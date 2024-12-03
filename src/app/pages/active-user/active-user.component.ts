@@ -13,10 +13,10 @@ import { timeInterval } from 'rxjs';
 export class ActiveUserComponent {
  constructor(private authService: AuthService, private routerActive: ActivatedRoute, private router: Router ) { }
 
- ngOnInit(): void {
+ async ngOnInit(): Promise<void> {
   const token = this.routerActive.snapshot.queryParamMap.get('token');
 
-  if(token != null)this.authService.activeUser(token);
+  if(token != null) await this.authService.activeUser(token);
   setTimeout(() => {
     this.router.navigate(['/login']);
   }, 3000);
