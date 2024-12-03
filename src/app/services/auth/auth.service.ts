@@ -24,32 +24,35 @@ export class AuthService {
   constructor(private router: Router, private http: HttpClient,
     private notification: NzNotificationService) { }
 
+  /**
+   * Activates a user account using the provided token.
+   * Sends a POST request to the API endpoint '/api/user/active-user' with the token as a query parameter.
+   * Verifies the activation response and returns it.
+   * 
+   * @param token - The token used to activate the user account.
+   * @returns A promise that resolves to the API response containing the activation status and message.
+   */
 
+  public async activeUser(token: string): Promise<void> {
 
-/**
- * Activates a user account using the provided token.
- * Sends a POST request to the API endpoint '/api/user/active-user' with the token as a query parameter.
- * Verifies the activation response and returns it.
- * 
- * @param token - The token used to activate the user account.
- * @returns A promise that resolves to the API response containing the activation status and message.
- */
+    try{
 
-  public async activeUser(token: string): Promise<ResponseApi> {
+      const params = new HttpParams().set('token', token);
 
-    const params = new HttpParams().set('token', token);
-    
-    const httpOptionsParams = {
-      ...this.httpOptions,
-      params
+      const httpOptionsParams = {
+        ...this.httpOptions,
+        params
+      }
+  
+      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/active-user`,
+        null, httpOptionsParams));
+  
+      this.verifyActiveUser(response);
+    }catch(error){
+       this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
     }
-
-    const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/active-user`,
-      null, httpOptionsParams));
-
-    this.verifyActiveUser(response);
-
-    return response;
   }
 
   /**
@@ -58,7 +61,7 @@ export class AuthService {
    * If the response status is false, a warning notification is displayed with the response message.
    * @param response - The response object containing the status and message from the API.
    */
-  private verifyActiveUser(response: ResponseApi) {
+  private verifyActiveUser(response: ResponseApi): void {
     if (response.success == true) {
       this.notification.create(
         'success',
@@ -73,7 +76,59 @@ export class AuthService {
       );
     }
   }
+
+  /**
+   * Initiates the account recovery process for a user.
+   * Sends a POST request to the '/api/auth/recovery-account' endpoint with the provided login details.
+   * Displays a notification based on the success of the recovery process.
+   * 
+   * @param createLogin - An object containing the login details required for account recovery.
+   * @returns A promise that resolves when the recovery process is complete.
+   */
+
+  public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi | null> {
+     if(createLogin.email_userName == null || createLogin.email_userName == '') 
+     {
+      this.notification.create(
+        'warning',
+        'Usuário!',
+        'Insira um email',
+      ); 
+      return null;
+     }
+
+     try{
+
+      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/auth/recovery-account`,
+        createLogin, this.httpOptions))
   
+      this.verifyRecoveryAccount(response);
+
+      return response;
+
+     }catch(erro)
+     {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+        return null;
+     }
+  }
+
+  /**
+   * Verifies the success of the account recovery process and displays a notification based on the result.
+   * If the recovery process was successful, a success notification is displayed with instructions to check the email for a password reset link.
+   * @param response - The response from the recovery account endpoint.
+   */
+  private verifyRecoveryAccount(response: ResponseApi): void {
+    if (response != null)
+      this.notification.create(
+        'success',
+        'Recuperação bem-sucedida',
+        'Verifique seu email para redefinir sua senha',
+      )
+  }
+
   /**
    * Authenticates the user by sending a login request to the server.
    * 
@@ -83,12 +138,13 @@ export class AuthService {
    */
 
   public async login(loginData: CreateLogin): Promise<ResponseLogin> {
+
     const response = await lastValueFrom(this.http.post<ResponseLogin>(`${this.apiUrl}/api/login`,
-      loginData, this.httpOptions));
+        loginData, this.httpOptions));
+  
+      this.verifyLogin(response);
 
-    this.verifyLogin(response);
-
-    return response;
+      return response;
   }
 
   /**
@@ -128,7 +184,10 @@ export class AuthService {
         `${this.apiUrl}/api/auth/verify`, this.httpOptions));
       return response;
     } catch (error) {
-      return false;
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+        return false;
     }
   }
 
