@@ -1,0 +1,80 @@
+<section>
+  <div class="form-img">
+  </div>
+  <div class="form">
+    <form (ngSubmit)="submitForm()">
+      <div class="form-header">
+        <div class="tittle">
+          <h1>Cadastrar Usuário</h1>
+        </div>
+        <div class="login-button">
+          <a nz-button nzType="primary" [nzLoading]="isLoadingOne" routerLink="/login">Entrar</a>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-box">
+            <label for="firstname">Nome</label>
+            @if (validateForm.invalid) {
+              <input nzSpaceItem nz-input placeholder="Error" [(ngModel)]="value" nzStatus="error" />
+            }@else{
+              <input type="text" nz-input formControlName="firstname" name="firstname" placeholder="Primeiro nome" required>
+            }
+        </div>
+
+        <div class="input-box">
+          <label for="lastname">Sobrenome</label>
+          <input type="text" nz-input formControlName="lastname"name="lastname" placeholder="Segundo nome"
+            required>
+        </div>
+
+        <div class="input-box">
+          <label for="username">Usuário</label>
+          <input type="text" nz-input [ngModel]="createUserForm.username" name="username" placeholder="Nome do usuário"
+            required>
+        </div>
+
+        <div class="input-box">
+          <label for="username">Funções:</label>
+          <nz-select [ngModel]="selectedRole" nzLoading [nzMaxTagCount]="3"
+            nzPlaceHolder="Selecione a função do usuário" nzMode="multiple" style="width: auto;"
+            [ngModel]="createUserForm.roles">
+            @for(d of roles; track d){
+            <nz-option [nzValue]="d" [nzLabel]="d.name"></nz-option>
+            }
+          </nz-select>
+        </div>
+
+        <div class="input-box">
+          <label for="cpfcnpj">Documento</label>
+          <nz-select [ngModel]="'CPF'">
+            <nz-option [nzValue]="createUserForm.legalPerson == false" nzLabel="CPF"></nz-option>
+            <nz-option [nzValue]="createUserForm.legalPerson == true" nzLabel="CNPJ"></nz-option>
+          </nz-select>
+          <input type="text" nz-input formControlName="cpfcnpj" style="width: auto;"
+            placeholder="Número do documento" />
+        </div>
+
+        <div class="input-box">
+          <label for="email">E-mail</label>
+          <input type="email" nz-input [ngModel]="createUserForm.email" name="username"
+            placeholder="exemplo@exemplo.com" required>
+        </div>
+
+        <div class="input-box">
+          <label for="password">Senha</label>
+          <input type="password" nz-input formControlName="password"  placeholder="senha" />
+        </div>
+
+        <div class="input-box">
+          <label for="password">Confirma senha</label>
+          <input type="password" nz-input [ngModel]="confirmPassword" name="confirm password"
+            placeholder="confirme sua senha" />
+        </div>
+      </div>
+      <div class="submit-button">
+        <button nz-button nzType="primary" (click)="submitForm()" [nzLoading]="isLoadingOne">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+</section>
