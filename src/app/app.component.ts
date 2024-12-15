@@ -18,10 +18,7 @@ export class AppComponent {
   isCollapsed = false;
   isLoading = true;
   isAuthenticated: boolean = false;
+  title: string = "Ativo Byte"
 
   constructor(private authService: AuthService, private router: Router) { }
-
-  async ngOnInit(): Promise<void> {
-
-  }
 }
