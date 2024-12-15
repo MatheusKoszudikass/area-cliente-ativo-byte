@@ -77,14 +77,17 @@ export class LoginComponent {
    * If the action is 'register', the class 'active' is added. If the action is 'login', the class 'active' is removed.
    * @param action - The action to be performed on the container element.
    */
-  getToggle(action: string) {
+  getToggle(action: string): void {
     const container = document.getElementById('container') as HTMLElement;
 
-    if (action === 'register') {
+    if (action === 'recovery') {
       container.classList.add('active');
     } else if (action === 'login') {
       container.classList.remove('active');
     }
+  }
+  register(): void {
+    this.router.navigate(['/add-user']);
   }
 
 /**
