@@ -44,7 +44,7 @@ export class AuthService {
         params
       }
   
-      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/active-user`,
+      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/twoFactorAuth`,
         null, httpOptionsParams));
   
       this.verifyActiveUser(response);
