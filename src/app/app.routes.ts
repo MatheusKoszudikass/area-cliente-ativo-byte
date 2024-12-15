@@ -5,6 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guard/auth.guard';
 import { loginGuard } from './guard/login.guard';
+import { AddUserComponent } from './pages/add-user/add-user.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'}, // Redireciona para login por padrão
@@ -12,7 +13,9 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] }, 
   
   { path: 'active-user', component: ActiveUserComponent },
-  // Página home com proteção de autenticação
+
+  { path: 'add-user', component: AddUserComponent},
+
   { 
     path: 'home', 
     component: HomeComponent, // Protege a rota home com authGuard
