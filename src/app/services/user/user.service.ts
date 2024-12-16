@@ -11,7 +11,7 @@ import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
   providedIn: 'root'
 })
 export class UserService {
-  apiUrl: string = environment.apiLogin
+  apiUrl: string = environment.apiLogin;
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -21,14 +21,16 @@ export class UserService {
     private notification: NzNotificationService
   ) { }
 
-  public async add(User: CreateUserInterface): Promise<ResponseApi | null> {
+  public async add(user: CreateUserInterface): Promise<ResponseApi | null> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/add`, User, this.httpOptions));
+      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/add`, user, this.httpOptions));
       return response;
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+
+        console.error(error);
     }
     return null
   }

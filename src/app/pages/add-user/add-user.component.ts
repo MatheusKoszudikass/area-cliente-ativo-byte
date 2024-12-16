@@ -17,6 +17,7 @@ import { RouterLink } from '@angular/router';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { UserService } from '../../services/user/user.service';
 
 
 
@@ -40,17 +41,18 @@ export class AddUserComponent {
   createUserForm: CreateUserInterface = {
     email: '',
     roles: [],
-    firstname: '',
-    lastname: '',
-    username: '',
-    cpfcnpj: '',
-    number: '',
+    firstName: '',
+    lastName: '',
+    userName: '',
+    cnpjCpfRg: '',
     password: '',
-    legalPerson: false
+    token: '',
+    legalRegister: false
   };
-
+  
   constructor(private fb: FormBuilder, 
-    private router: Router, private roleService: RoleService) {
+    private router: Router, private roleService: RoleService, 
+    private userService: UserService) {
 
     this. validateForm = this.fb.group({
       firstname: this.fb.control('', [Validators.required]),
@@ -59,10 +61,11 @@ export class AddUserComponent {
         '',
         [Validators.required, Validators.maxLength(12), Validators.minLength(6)],
       ),
-      roles: this.fb.control('', [Validators.required]),
+      roles: this.fb.control([], [Validators.required]),
+      document: this.fb.control('CPF', [Validators.required]),
       cpfcnpj: this.fb.control('', [Validators.required]),
       email: this.fb.control('', [Validators.required, Validators.email]),
-      mobile: this.fb.control('', [Validators.required, Validators.nullValidator]),
+      number: this.fb.control('', [Validators.required, Validators.nullValidator]),
       password: this.fb.control('', [Validators.required]),
       confirmPassword: this.fb.control('', [Validators.required]),
       legalPerson: this.fb.control('', [Validators.required])
@@ -87,12 +90,31 @@ export class AddUserComponent {
     dataRole.forEach((role) => {
       this.roles.push(role);
     })
-  
-    console.log(this.roles); // Exibe o array de nomes
   }
 
   submitForm(): void {
     this.isLoadingOne = true;
+
+      this.createUserForm.email = this.validateForm.value?.email;
+      this.createUserForm.roles = this.validateForm.value?.roles;
+      this.createUserForm.firstName = this.validateForm.value?.firstname;
+      this.createUserForm.lastName = this.validateForm.value?.lastname;
+      this.createUserForm.userName = this.validateForm.value?.username;
+      this.createUserForm.password = this.validateForm.value?.password;
+      this.createUserForm.cnpjCpfRg = this.validateForm.value?.cpfcnpj;
+      this.createUserForm.roles = this.validateForm.value?.roles;
+ 
+      // this.createUserForm.number = this.validateForm.value.number;
+      this.createUserForm.legalRegister = true;
+      this.createUserForm.password = this.validateForm.value.password;
+      console.log(this.validateForm.value.document );
+      if(this.validateForm.value.document === 'CPF'){
+        this.createUserForm.legalRegister = false;
+      }
+
+     const response =  this.userService.add(this.createUserForm);
+
+    console.log(this.createUserForm);
    
   }
 }
