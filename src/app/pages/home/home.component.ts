@@ -9,11 +9,11 @@ import { RouterOutlet, Router } from '@angular/router';
 import { routes } from '../../app.routes';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [NzLayoutModule, NzMenuModule, NzIconModule, CommonModule, RouterOutlet],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+    selector: 'app-home',
+    standalone: true,
+    imports: [NzLayoutModule, NzMenuModule, NzIconModule, CommonModule, RouterOutlet],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   isCollapsed = false;

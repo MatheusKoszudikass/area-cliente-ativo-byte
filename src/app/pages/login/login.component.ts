@@ -11,13 +11,13 @@ import { DOCUMENT } from '@angular/common'
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [NzButtonModule,
-    NzCheckboxModule, NzInputModule, NzIconModule, NzAlertModule,
-  ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    standalone: true,
+    imports: [NzButtonModule,
+        NzCheckboxModule, NzInputModule, NzIconModule, NzAlertModule,
+        ReactiveFormsModule],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 
 export class LoginComponent {

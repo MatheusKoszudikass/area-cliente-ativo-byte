@@ -4,11 +4,11 @@ import { ActivatedRoute, Router  } from '@angular/router';
 import { timeInterval } from 'rxjs';
 
 @Component({
-  selector: 'app-active-user',
-  standalone: true,
-  imports: [],
-  templateUrl: './active-user.component.html',
-  styleUrl: './active-user.component.scss'
+    selector: 'app-active-user',
+    standalone: true,
+    imports: [],
+    templateUrl: './active-user.component.html',
+    styleUrl: './active-user.component.scss'
 })
 export class ActiveUserComponent {
  constructor(private authService: AuthService, private routerActive: ActivatedRoute, private router: Router ) { }

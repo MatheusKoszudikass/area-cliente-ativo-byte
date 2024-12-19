@@ -7,12 +7,12 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { AuthService } from './services/auth/auth.service';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, NzIconModule,
-     NzLayoutModule, NzMenuModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    standalone: true,
+    imports: [CommonModule, RouterOutlet, NzIconModule,
+        NzLayoutModule, NzMenuModule],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   isCollapsed = false;
