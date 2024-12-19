@@ -1,165 +1,211 @@
 :host {
-    display: flex;
-    margin: 0;
-    width: 100%;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-    background: white;
+  display: flex;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #e2e2e2, #c9d6ff);
 }
 
+.Aviso {
+  position: fixed;
+  background-color: #f8d7da; /* Fundo vermelho claro */
+  color: #721c24; /* Texto vermelho escuro */
+  padding: 15px 20px;
+  border: 1px solid #f5c6cb; /* Borda levemente mais escura */
+  border-radius: 5px; /* Arredondar as bordas */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombras suaves */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  z-index: 1000; /* Garante que o aviso estará acima de outros elementos */
+  width: auto; /* Largura fixa para o aviso */
+  height: auto;
+}
+
+.Aviso h2 {
+  margin: 0 0 10px; /* Espaçamento inferior */
+  font-size: 16px;
+  color: #721c24;
+}
+
+.Aviso p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.Aviso a {
+  color: #0056b3; /* Azul para o link */
+  text-decoration: none;
+}
+
+.Aviso a:hover {
+  text-decoration: underline; /* Sublinha o link ao passar o mouse */
+}
+
+.Aviso button {
+  top: 10px;
+  right: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #000000;
+}
+
+.Aviso button:hover {
+  color: #ffffff;
+  background: #000000;
+}
+
+
 section {
-    width: 90%;
-    height: 80vh;
-    display: flex;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.212);
-    justify-content: center;
-    align-items: center;
+  width: auto;
+  height: auto;
+  display: flex;
+  box-shadow: 10px 10px 10px 10px rgba(1, 9, 80, 0.212);
+  border-radius: 60px;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  align-items: center;
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px;
 }
 .form-header {
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .login-button {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    & a {
-        border: none;
-        padding: 0.4rem 1rem;
-        border-radius: 5px;
-    }
+  & a {
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+  }
 }
 
 .form-header h1::after {
-    content: '';
-    display: block;
-    width: 5rem;
-    height: 0.3rem;
-    background-color: #c9d6ff;
-    margin: 0 auto;
-    position: absolute;
-    border-radius: 10px;
+  content: "";
+  display: block;
+  width: 5rem;
+  height: 0.3rem;
+  background-color: #ffa500;
+  margin: 0 auto;
+  position: absolute;
+  border-radius: 10px;
 }
 
 .input-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    /* Define duas colunas iguais */
-    gap: 20px;
-    /* Espaçamento entre os itens */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 .input-box {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  & input {
+    width: 10%;
+  }
 }
 
 .input-box label {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
-
-// .input-box input {
-//     padding: 0.8rem 1.2rem;
-
-//     border-radius: 10px;
-//     box-shadow: 1px 1px 6px #0000004d;
-//     font-size: 0.8rem;
-    
-// }
 
 .input-box input,
 .input-box nz-select {
-    width: 100%;
+  width: 100%;
 }
 
-
-// .form {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     flex-direction: column;
-//     background-color: white;
-//     // padding: 3rem;
-// }
-
-// .form-header {
-//     margin-bottom: 1rem;
-//     display: flex;
-//     justify-content: space-between;
-// }
-
-// .login-button {
-//     display: flex;
-//     align-items: center;
-
-//     & a {
-//         border: none;
-//         padding: 0.4rem 1rem;
-//         border-radius: 5px;
-//     }
-// }
-
-// .form-header h1::after {
-//     content: '';
-//     display: block;
-//     width: 5rem;
-//     height: 0.3rem;
-//     background-color: #c9d6ff;
-//     margin: 0 auto;
-//     position: absolute;
-//     border-radius: 10px;
-// }
-
-// .input-group {
-//     display: flex;
-//     flex-wrap: wrap;
-//     justify-content: space-between;
-//     padding: 1rem 0;
-// }
-
-// .input-box {
-//     display: flex;
-//     flex-direction: column;
-//     margin-bottom: 1.1rem;
-// }
-
-// .input-box input {
-//     margin-top: 0.6rem;
-//     padding: 0.8rem 1.2rem;
-//     border: none;
-//     border-radius: 10px;
-//     box-shadow: 1px 1px 6px #0000004d;
-//     font-size: 0.8rem;
-// }
-
 .submit-button {
-    display: flex;
-    padding: 20px;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
 
-    & button {
-        border: none;
-        padding: 0.4rem 1rem;
-        border-radius: 5px;
-    }
+  & button {
+    border: none;
+    border-radius: 5px;
+  }
 }
 
 [nz-form] {
-    max-width: 600px;
+  max-width: 600px;
 }
 
 nz-select {
-    margin: 0 8px 10px 0;
-    width: 120px;
+  margin: 0 8px 10px 0;
+  width: 120px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animação para os inputs */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+section {
+  animation: fadeInUp 2s ease-out;
+}
+
+.input-box input,
+.input-box nz-select {
+  opacity: 0;
+  animation: fadeInLeft 0.6s ease-out 0.2s forwards;
+}
+
+.input-box:nth-child(1) input,
+.input-box:nth-child(1) nz-select {
+  animation-delay: 0.5s;
+}
+
+.input-box:nth-child(2) input,
+.input-box:nth-child(2) nz-select {
+  animation-delay: 0.8s;
+}
+
+.input-box:nth-child(3) input,
+.input-box:nth-child(3) nz-select {
+  animation-delay: 1s;
+}
+
+@media screen and (max-width: 616px) {
+  :host {
+    height: auto;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    gap: 10px;
+  }
 }
