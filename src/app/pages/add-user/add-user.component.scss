@@ -81,12 +81,22 @@ section {
   margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .login-button {
   display: flex;
   align-items: center;
+  display: flex;
+  align-items: center;
 
+  & a {
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+  }
   & a {
     border: none;
     padding: 0.4rem 1rem;
@@ -109,6 +119,9 @@ section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 .input-box {
@@ -121,14 +134,20 @@ section {
 
 .input-box label {
   margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .input-box input,
 .input-box nz-select {
   width: 100%;
+  width: 100%;
 }
 
 .submit-button {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
   display: flex;
   padding: 20px;
   justify-content: center;
@@ -138,13 +157,20 @@ section {
     border: none;
     border-radius: 5px;
   }
+  & button {
+    border: none;
+    border-radius: 5px;
+  }
 }
 
 [nz-form] {
   max-width: 600px;
+  max-width: 600px;
 }
 
 nz-select {
+  margin: 0 8px 10px 0;
+  width: 120px;
   margin: 0 8px 10px 0;
   width: 120px;
 }

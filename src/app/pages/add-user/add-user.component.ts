@@ -54,10 +54,17 @@ export class AddUserComponent {
     lastName: '',
     userName: '',
     cnpjCpfRg: '',
+    firstName: '',
+    lastName: '',
+    userName: '',
+    cnpjCpfRg: '',
     password: '',
     token: '',
     legalRegister: false
+    token: '',
+    legalRegister: false
   };
+  
   
   constructor(private fb: FormBuilder, 
     private router: Router, private roleService: RoleService, 
