@@ -1,5 +1,5 @@
-export interface ResponseApi {
+export interface ResponseApi<T> {
     success: boolean;
     message: string;
-    data: Array<string>; 
+    data: Array<T>; 
 }
