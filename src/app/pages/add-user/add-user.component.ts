@@ -21,7 +21,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { UserService } from '../../services/user/user.service';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
@@ -54,15 +53,9 @@ export class AddUserComponent {
     lastName: '',
     userName: '',
     cnpjCpfRg: '',
-    firstName: '',
-    lastName: '',
-    userName: '',
-    cnpjCpfRg: '',
     password: '',
     token: '',
-    legalRegister: false
-    token: '',
-    legalRegister: false
+    legalRegister: false,
   };
   
   
