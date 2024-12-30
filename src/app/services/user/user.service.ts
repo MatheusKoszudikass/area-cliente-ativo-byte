@@ -23,7 +23,8 @@ export class UserService {
 
   public async add(user: CreateUserInterface): Promise<void> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/add`, user, this.httpOptions));
+      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/add`, 
+        user, this.httpOptions));
       this.notificationOfUserRegistration(response);
 
     } catch (error) {
@@ -33,7 +34,7 @@ export class UserService {
     }
   }
 
-  private notificationOfUserRegistration(response: ResponseApi): void {
+  private notificationOfUserRegistration(response: ResponseApi<any>): void {
 
     if (response.success == true) {
       this.notification.create(
@@ -49,7 +50,7 @@ export class UserService {
 
   public async Exist(identifier: string | null | undefined): Promise<boolean> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/exist`, { identifier }, this.httpOptions));
+      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/exist`, { identifier }, this.httpOptions));
       return response.success;
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
