@@ -60,7 +60,7 @@ export class AddUserComponent {
   
   
   constructor(private fb: FormBuilder, 
-    private router: Router, private roleService: RoleService, 
+    private roleService: RoleService, 
     private userService: UserService, private cdr: ChangeDetectorRef) {
 
     this. validateForm = this.fb.group({
