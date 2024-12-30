@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { ResponseApi } from '../../interfaces/response-api.interface';
 import { CreateUserInterface } from '../../interfaces/create-user-interface';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
+import { RecoveryAccountInterface } from '../../interfaces/recovery-account-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class UserService {
 
   public async add(user: CreateUserInterface): Promise<void> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/add`, 
+      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/add`,
         user, this.httpOptions));
       this.notificationOfUserRegistration(response);
 
@@ -59,6 +60,41 @@ export class UserService {
 
       return false
     }
+  }
+
+  public async recoveryAccount(recovery: RecoveryAccountInterface): Promise<boolean> {
+    try {
+
+      const response = await lastValueFrom(
+        this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/confirmPasswordReset`,
+          recovery, this.httpOptions));
+
+      this.notificationOfUserRecovery(response);
+
+      if(response.success === true) return true;
+
+      return false;
+
+    } catch (error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+        return false;
+    }
+  }
+
+  private notificationOfUserRecovery(response: ResponseApi<any>): void {
+
+    if (response.success == true) {
+      this.notification.create(
+        'success',
+        'Usuário',
+        response.message,
+      );
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.notification.create('warning', 'Usuário', response.message);
   }
 
 
