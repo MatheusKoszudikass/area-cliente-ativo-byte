@@ -24,7 +24,9 @@ export class UserService {
 
   public async add(user: CreateUserInterface): Promise<void> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/add`,
+      
+      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/add
+      
         user, this.httpOptions));
       this.notificationOfUserRegistration(response);
 

@@ -91,6 +91,7 @@ export class AuthService {
    */
 
   public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
+    
      if(createLogin.emailUserName == null || createLogin.emailUserName == '') 
      {
       this.notification.create(
