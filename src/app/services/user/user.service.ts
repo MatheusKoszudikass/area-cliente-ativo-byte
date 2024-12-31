@@ -24,10 +24,10 @@ export class UserService {
 
   public async add(user: CreateUserInterface): Promise<void> {
     try {
-      
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/add
-      
-        user, this.httpOptions));
+
+      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(
+        `${this.apiUrl}/api/user/add`, user, this.httpOptions));
+
       this.notificationOfUserRegistration(response);
 
     } catch (error) {
@@ -53,7 +53,7 @@ export class UserService {
 
   public async Exist(identifier: string | null | undefined): Promise<boolean> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/exist`, { identifier }, this.httpOptions));
+      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${ this.apiUrl } / api / user / exist`, { identifier }, this.httpOptions));
       return response.success;
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
@@ -68,7 +68,7 @@ export class UserService {
     try {
 
       const response = await lastValueFrom(
-        this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/confirmPasswordReset`,
+        this.http.post<ResponseApi<any>>(`${ this.apiUrl } / api / user / confirmPasswordReset`,
           recovery, this.httpOptions));
 
       this.notificationOfUserRecovery(response);
