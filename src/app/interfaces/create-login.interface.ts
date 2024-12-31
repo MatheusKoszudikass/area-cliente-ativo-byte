@@ -1,5 +1,5 @@
 export interface CreateLogin {
-    email_userName:string,
+    emailUserName:string,
     password:string,
     remember: boolean,
     menssage:string,

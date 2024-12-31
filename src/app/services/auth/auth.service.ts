@@ -91,7 +91,8 @@ export class AuthService {
    */
 
   public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
-     if(createLogin.email_userName == null || createLogin.email_userName == '') 
+    
+     if(createLogin.emailUserName == null || createLogin.emailUserName == '') 
      {
       this.notification.create(
         'warning',

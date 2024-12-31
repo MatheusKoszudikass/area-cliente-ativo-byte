@@ -29,7 +29,7 @@ export class LoginComponent {
   title: string = 'Login';
 
   loginObj: CreateLogin = {
-    email_userName: '',
+    emailUserName: '',
     password: '',
     remember: false,
     menssage: ''
@@ -65,9 +65,10 @@ export class LoginComponent {
    */
     
   async onLogin() {
-    this.loginObj.email_userName = this.formValidadeLogin.value.username ?? '';
+    this.loginObj.emailUserName = this.formValidadeLogin.value.username ?? '';
     this.loginObj.password = this.formValidadeLogin.value.password ?? '';
     this.loginObj.remember = this.formValidadeLogin.value.remember ?? false;
+    
 
     return await this.authService.login(this.loginObj);
   }
@@ -132,7 +133,7 @@ export class LoginComponent {
     this.isLoadingOne = true;
     this.isButtonDisabled = true;
 
-    this.loginObj.email_userName = this.formValidadeRecoveryAccount.value.email ?? '';
+    this.loginObj.emailUserName = this.formValidadeRecoveryAccount.value.email ?? '';
     
     const response = await this.authService.recoveryAccount(this.loginObj);
 
