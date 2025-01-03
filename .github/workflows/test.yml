@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Agunlar CI
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,10 +22,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Install dependencies for Chrome
-      run: sudo apt-get install -y libnss3 libgconf-2-4 libxss1 libasound2 libatk1.0-0 libpangocairo-1.0-0 fonts-liberation
-    - name: Install Chrome
-      run: sudo apt-get install -y google-chrome-stable
+    
     - run: npm ci
-    - run: npm run build
-    - run: npm test
+    - run: npm run build --if-present
+    - run: npm run test:ci
