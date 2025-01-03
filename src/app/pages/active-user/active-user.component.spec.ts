@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ActiveUserComponent } from './active-user.component';
+import { RouterModule } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ActiveUserComponent', () => {
   let component: ActiveUserComponent;
@@ -8,7 +9,8 @@ describe('ActiveUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ActiveUserComponent]
+      imports: [ActiveUserComponent, RouterModule.forRoot([])],
+      providers: [provideHttpClient()]
     })
     .compileComponents();
 
@@ -21,3 +23,4 @@ describe('ActiveUserComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
