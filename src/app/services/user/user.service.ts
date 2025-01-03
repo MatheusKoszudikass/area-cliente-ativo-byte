@@ -36,7 +36,7 @@ export class UserService {
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
     }
   }
-
+  
   private notificationOfUserRegistration(response: ResponseApi<any>): void {
 
     if (response.success == true) {
@@ -124,7 +124,6 @@ export class UserService {
   }
 
   private calculationValidationCPf(cpf: string): boolean {
-
     const calc = (x: number): number => {
       const total = cpf
         .substring(0, x)

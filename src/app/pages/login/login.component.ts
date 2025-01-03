@@ -7,7 +7,6 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CreateLogin } from '../../interfaces/create-login.interface';
-import { DOCUMENT } from '@angular/common'
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @Component({
@@ -44,8 +43,8 @@ export class LoginComponent {
    * @param document - The document to get the url of the current page
    * @param fb - The form builder to create the form
    */
-  constructor(private router: Router, public authService: AuthService,
-    @Inject(DOCUMENT) private document: Document, private fb: NonNullableFormBuilder) {
+  constructor(private router: Router, public authService: AuthService, 
+    private fb: NonNullableFormBuilder) {
 
       this.formValidadeLogin = this.fb.group({
         username: this.fb.control('', [Validators.required]),
