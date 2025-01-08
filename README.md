@@ -1,27 +1,45 @@
-# AreaClienteAtivoByte
+🚀 Visão Geral
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.5.
+Área Cliente AtivoByte é uma aplicação que visa proporcionar uma experiência intuitiva e segura para o gerenciamento de contas de usuários, oferecendo acesso a funcionalidades e dados protegidos via API. O foco é garantir que o cliente tenha total controle sobre suas informações e atividades, enquanto a aplicação segue as melhores práticas de segurança e usabilidade.
 
-## Development server
+🔑 Funcionalidades Principais
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Login e Cadastro: 💻
+Permite login e cadastro de novos usuários, com validação de dados.
 
-## Code scaffolding
+Envio de E-mail com Token de Ativação: 📧
+Após o cadastro, um token é enviado por e-mail para garantir a verificação do usuário.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Recuperação de Conta: 🔑
+Caso o usuário esqueça suas credenciais, ele pode recuperar sua conta de forma simples e segura.
 
-## Build
+Autenticação e Autorização com JWT: 🔒
+O login é feito através de Token JWT, armazenado em cookies HttpOnly para maior segurança.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Logout: 🚪
+A funcionalidade de logout invalidará o token da sessão, garantindo a segurança.
 
-## Running unit tests
+Perfil de Usuário: 👤
+Em breve, será possível editar e atualizar os dados do perfil diretamente na aplicação.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Integração com API Externa: 🌍
+A aplicação interage com a API externa com repositório em [API Ativo Byte.](https://github.com/MatheusKoszudikass/api_login_cl_ativo_byte)
 
-## Running end-to-end tests
+🏗️ Arquitetura
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+A aplicação foi construída utilizando o framework Angular com uma estrutura modular, permitindo maior escalabilidade e fácil manutenção do código. A aplicação adota práticas modernas de desenvolvimento, como:
 
-## Further help
+Implementação de formulários reativos.
+Uso de fluxos de dados baseados na autenticação JWT.
+Sempre buscamos a melhor solução para proporcionar uma experiência eficiente e segura ao usuário.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+🚧 Funcionalidades Futuras
+
+Integração com o Sistema Ativo Byte: 💡
+Planejamos adicionar uma funcionalidade para permitir que o usuário visualize o serviço que a Ativo Byte está prestando, com interação direta na página.
+
+Monitoramento de Tempo e Conclusão de Projetos: ⏱️
+A funcionalidade permitirá que o usuário veja o tempo gasto em cada projeto e a previsão de conclusão.
+
+Feedback do Cliente: 🗣️
+O cliente poderá interagir diretamente com a plataforma para fornecer feedback sobre os projetos, ajudando a Ativo Byte a ajustar os serviços conforme suas necessidades.
