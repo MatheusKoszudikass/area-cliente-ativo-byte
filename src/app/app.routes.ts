@@ -6,6 +6,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guard/auth.guard';
 import { loginGuard } from './guard/login.guard';
 import { AddUserComponent } from './pages/add-user/add-user.component';
+import { ProfileUserComponent } from './pages/profile-user/profile-user.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'}, // Redireciona para login por padrão
@@ -16,17 +18,19 @@ export const routes: Routes = [
 
   { path: 'add-user', component: AddUserComponent},
 
+  { path: 'reset-password', component: ResetPasswordComponent},
+
   { 
     path: 'home', 
-    component: HomeComponent, // Protege a rota home com authGuard
+    component: HomeComponent, 
     children: [
+      { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: 'welcome', component: WelcomeComponent },
-      { path: 'login', component: LoginComponent }, // Exemplo de rota filha
-      // Adicione outras rotas filhas conforme necessário
+      { path: 'profile-user', component: ProfileUserComponent }, 
     ],
     canActivate: [authGuard]
   },
-  { path: '**', redirectTo: '/login' } // Redirecionar para login para rotas inválidas
+  { path: '**', redirectTo: '/login' } 
 
 ];
 

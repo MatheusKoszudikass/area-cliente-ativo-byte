@@ -10,21 +10,21 @@
 
 .Aviso {
   position: fixed;
-  background-color: #f8d7da; /* Fundo vermelho claro */
-  color: #721c24; /* Texto vermelho escuro */
+  background-color: #f8d7da;
+  color: #721c24; 
   padding: 15px 20px;
-  border: 1px solid #f5c6cb; /* Borda levemente mais escura */
-  border-radius: 5px; /* Arredondar as bordas */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombras suaves */
+  border: 1px solid #f5c6cb;
+  border-radius: 5px; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
   font-family: Arial, sans-serif;
   font-size: 14px;
-  z-index: 1000; /* Garante que o aviso estará acima de outros elementos */
-  width: auto; /* Largura fixa para o aviso */
+  z-index: 1000; 
+  width: auto; 
   height: auto;
 }
 
 .Aviso h2 {
-  margin: 0 0 10px; /* Espaçamento inferior */
+  margin: 0 0 10px;
   font-size: 16px;
   color: #721c24;
 }
@@ -35,12 +35,12 @@
 }
 
 .Aviso a {
-  color: #0056b3; /* Azul para o link */
+  color: #0056b3;
   text-decoration: none;
 }
 
 .Aviso a:hover {
-  text-decoration: underline; /* Sublinha o link ao passar o mouse */
+  text-decoration: underline;
 }
 
 .Aviso button {

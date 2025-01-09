@@ -43,3 +43,4 @@ A funcionalidade permitirá que o usuário veja o tempo gasto em cada projeto e 
 
 Feedback do Cliente: 🗣️
 O cliente poderá interagir diretamente com a plataforma para fornecer feedback sobre os projetos, ajudando a Ativo Byte a ajustar os serviços conforme suas necessidades.
+

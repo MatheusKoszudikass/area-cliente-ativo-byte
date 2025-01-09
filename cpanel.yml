@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    # Definir o caminho do deploy
+    - export DEPLOYPATH=/home/ativobyt/cliente.ativobyte.com.br/
+
+    # Copiar diretórios
+    - /bin/cp -R dist/area-cliente-ativo-byte/browser $DEPLOYPATH
+

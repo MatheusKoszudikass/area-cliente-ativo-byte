@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ResponseApi } from '../../interfaces/response-api.interface';
@@ -7,6 +7,9 @@ import { ResponseLogin } from '../../interfaces/response-login.interface';
 import { CreateLogin } from '../../interfaces/create-login.interface';
 import { environment } from '../../../environments/environment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { DOCUMENT, } from '@angular/common';
+import { CookiesService } from '../cookies/cookies.service';
+import { ResponseUserInterface } from '../../interfaces/response-user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +24,9 @@ export class AuthService {
     withCredentials: true
   };
 
-  constructor(private router: Router, private http: HttpClient,
-    private notification: NzNotificationService) { }
+  constructor(@Inject(DOCUMENT) private document: Document, 
+  private router: Router, private http: HttpClient,
+    private notification: NzNotificationService, private	cookiesService: CookiesService) { }
 
   /**
    * Activates a user account using the provided token.
@@ -44,7 +48,7 @@ export class AuthService {
         params
       }
   
-      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/user/twoFactorAuth`,
+      const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/user/twoFactorAuth`,
         null, httpOptionsParams));
   
       this.verifyActiveUser(response);
@@ -61,7 +65,7 @@ export class AuthService {
    * If the response status is false, a warning notification is displayed with the response message.
    * @param response - The response object containing the status and message from the API.
    */
-  private verifyActiveUser(response: ResponseApi): void {
+  private verifyActiveUser(response: ResponseApi<null>): void {
     if (response.success == true) {
       this.notification.create(
         'success',
@@ -86,8 +90,9 @@ export class AuthService {
    * @returns A promise that resolves when the recovery process is complete.
    */
 
-  public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi | null> {
-     if(createLogin.email_userName == null || createLogin.email_userName == '') 
+  public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
+    
+     if(createLogin.emailUserName == null || createLogin.emailUserName == '') 
      {
       this.notification.create(
         'warning',
@@ -99,7 +104,7 @@ export class AuthService {
 
      try{
 
-      const response = await lastValueFrom(this.http.post<ResponseApi>(`${this.apiUrl}/api/auth/recovery-account`,
+      const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/auth/recovery-account`,
         createLogin, this.httpOptions))
   
       this.verifyRecoveryAccount(response);
@@ -120,7 +125,7 @@ export class AuthService {
    * If the recovery process was successful, a success notification is displayed with instructions to check the email for a password reset link.
    * @param response - The response from the recovery account endpoint.
    */
-  private verifyRecoveryAccount(response: ResponseApi): void {
+  private verifyRecoveryAccount(response: ResponseApi<null>): void {
     if (response != null)
       this.notification.create(
         'success',
@@ -137,14 +142,21 @@ export class AuthService {
    * @throws An error if the HTTP request fails.
    */
 
-  public async login(loginData: CreateLogin): Promise<ResponseLogin> {
+  public async login(loginData: CreateLogin): Promise<ResponseLogin | null> {
 
-    const response = await lastValueFrom(this.http.post<ResponseLogin>(`${this.apiUrl}/api/login`,
+    try{
+      const response = await lastValueFrom(this.http.post<ResponseLogin>(`${this.apiUrl}/api/auth/login`,
         loginData, this.httpOptions));
   
       this.verifyLogin(response);
 
       return response;
+    }catch (error){
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+      return null;
+    }
   }
 
   /**
@@ -152,7 +164,6 @@ export class AuthService {
    * If the login was successful, navigates to the welcome page.
    * @param response - The response from the server.
    */
-
   private verifyLogin(response: ResponseLogin) {
     if (response.status) {
       this.notification.create(
@@ -191,17 +202,58 @@ export class AuthService {
     }
   }
 
-  /**
-   * Logs the user out of the application by removing the authentication token from local storage
-   * and navigating back to the login page.
-   */
+  public async findUser(): Promise<ResponseApi<ResponseUserInterface> | null> {
+    
+    try{
+      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
+         this.httpOptions));
 
-  logout(): void {
-    this.isLoggedIn = false;
-    sessionStorage.removeItem('token');
-    this.router.navigate(['/login']);
+      if(response.success === false) this.router.navigate(['/login']);
+
+      return response;
+
+    }catch(error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+        return null;
+    }
   }
 
+  /**
+   * Logs out the user by sending a logout request to the server.
+   * Shows a notification on success or failure.
+   * @returns A promise that resolves to void.
+   */
+  public async logout(): Promise<void> {
+
+      try{
+         const response = await lastValueFrom(this.http.get<ResponseApi<null>>(`${this.apiUrl}/api/auth/logout`,
+          this.httpOptions));
+          this.verifyLogout(response);
+      }catch(error) {
+        this.notification.create('error', 'API', 'Desculpe,' +
+          ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+          'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+      }
+  }
+
+  private verifyLogout(response: ResponseApi<null>): void {
+    if (response) {
+      this.notification.create(
+        'success',
+        'Logout bem-sucedido!',
+        `Logout efetuado com sucesso!`
+      );
+      this.router.navigate(['/login']);
+    } else {
+      this.notification.create(
+        'error',
+        'Não foi possível efetuar o logout',
+        'Desculpe, não foi possível efetuar o logout'
+      );
+    }
+  }
   /**
    * Checks if the user is authenticated by verifying the authentication token.
    *

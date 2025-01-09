@@ -12,7 +12,6 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { FormsModule } from '@angular/forms';
 import { CreateUserInterface } from '../../interfaces/create-user-interface';
-import { Router } from '@angular/router';
 import { RoleService } from '../../services/role/role.service';
 import { ResponseRoleInterface } from '../../interfaces/response-role.interface';
 import { RouterLink } from '@angular/router';
@@ -21,17 +20,16 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { UserService } from '../../services/user/user.service';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
-    selector: 'app-add-user',
-    standalone: true,
-    imports: [NzButtonModule, NzInputModule, NzSelectModule, FormsModule, RouterLink,
-        NzSpaceModule, NzIconModule, ReactiveFormsModule, NzFormModule, NgxMaskDirective],
-        providers:[provideNgxMask()],
-    templateUrl: './add-user.component.html',
-    styleUrl: './add-user.component.scss'
+  selector: 'app-add-user',
+  standalone: true,
+  imports: [NzButtonModule, NzInputModule, NzSelectModule, FormsModule, RouterLink,
+    NzSpaceModule, NzIconModule, ReactiveFormsModule, NzFormModule, NgxMaskDirective],
+  providers: [provideNgxMask()],
+  templateUrl: './add-user.component.html',
+  styleUrl: './add-user.component.scss'
 })
 export class AddUserComponent {
 
@@ -54,23 +52,17 @@ export class AddUserComponent {
     lastName: '',
     userName: '',
     cnpjCpfRg: '',
-    firstName: '',
-    lastName: '',
-    userName: '',
-    cnpjCpfRg: '',
     password: '',
     token: '',
-    legalRegister: false
-    token: '',
-    legalRegister: false
+    legalRegister: false,
   };
-  
-  
-  constructor(private fb: FormBuilder, 
-    private router: Router, private roleService: RoleService, 
+
+
+  constructor(private fb: FormBuilder,
+    private roleService: RoleService,
     private userService: UserService, private cdr: ChangeDetectorRef) {
 
-    this. validateForm = this.fb.group({
+    this.validateForm = this.fb.group({
       firstname: this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
       lastname: this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
       username: this.fb.control(
@@ -81,9 +73,9 @@ export class AddUserComponent {
       document: this.fb.control('CPF'),
       cpfcnpj: this.fb.control(
         '',
-         [Validators.required, this.cpfCnpjValidator()],
+        [Validators.required, this.cpfCnpjValidator()],
       ),
-      email: this.fb.control('', [Validators.required, Validators.email],[this.emailValidator()]),
+      email: this.fb.control('', [Validators.required, Validators.email], [this.emailValidator()]),
       number: this.fb.control('', [Validators.required, Validators.maxLength(14)]),
       password: this.fb.control('', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
       confirmPassword: this.fb.control('', [Validators.required, this.passwordMatchValidator()]),
@@ -91,13 +83,13 @@ export class AddUserComponent {
   }
 
   userNameValidator() {
-    return async (control:AbstractControl): Promise<ValidationErrors | null> => {
+    return async (control: AbstractControl): Promise<ValidationErrors | null> => {
       const userName = control.value;
-  
+
       if (!userName) {
-        return of(null); // Campo vazio é tratado pelo Validators.required
+        return of(null);
       }
-  
+
       try {
         const result = await this.userService.Exist(userName);
         if (result) {
@@ -106,10 +98,10 @@ export class AddUserComponent {
         }
 
         this.existUserName = false;
-        return null; // Sem erros
+        return null;
       } catch (error) {
         console.error("Erro ao verificar nome de usuário:", error);
-        return null; // Considera válido em caso de erro no serviço
+        return null;
       }
     }
   }
@@ -118,35 +110,36 @@ export class AddUserComponent {
     const aviso = document.getElementById('aviso');
     aviso!.style.display = 'none';
   }
-   emailValidator() {
+
+  emailValidator() {
     return async (control: AbstractControl): Promise<ValidationErrors | null> => {
       const email = control.value;
       this.loadingEmail = true;
-  
+
       if (!email) {
         this.loadingEmail = false;
         this.cdr.detectChanges();
         return null;
       }
-  
+
       try {
 
         this.existEmail = await this.userService.Exist(email);
 
-        if (this.existEmail  == true) {
+        if (this.existEmail == true) {
           this.existEmail = true;
           this.loadingEmail = false;
-          return { emailExists: true};
+          return { emailExists: true };
         }
-  
+
         this.existEmail = false;
         this.loadingEmail = false;
         this.cdr.detectChanges();
-        return null; // Sem erros
+        return null;
       } catch (error) {
         console.error("Erro ao verificar e-mail:", error);
         this.cdr.detectChanges();
-        return null; // Considera válido em caso de erro no serviço
+        return null;
       }
     };
   }
@@ -154,37 +147,37 @@ export class AddUserComponent {
   passwordMatchValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!this.validateForm) {
-        return null; // Garantir que o formulário está inicializado
+        return null;
       }
-  
+
       const password = this.validateForm.get('password')?.value;
       const confirmPassword = control.value;
-  
+
       if (!password || !confirmPassword) {
-        return null; // Não validar se os campos ainda estão vazios
+        return null;
       }
-  
+
       if (password !== confirmPassword) {
         this.passwordStatus = false;
-        return { passwordMismatch: true }; // Retorna erro se as senhas não coincidem
+        return { passwordMismatch: true };
       }
-  
+
       this.passwordStatus = true;
-      return null; // Sem erros
+      return null;
     };
   }
   cpfCnpjValidator() {
-     return (control: AbstractControl): ValidationErrors | null => {
+    return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
       if (!value) {
-        return null; // Campo vazio será tratado pelo Validators.required
+        return null;
       }
 
       const isCpfValid = value.length === 11 && this.userService.validationDocument(
-        this.validateForm.value.document,value);
+        this.validateForm.value.document, value);
 
       const isCnpjValid = value.length === 14 && this.userService.validationDocument(
-        this.validateForm.value.document,value);
+        this.validateForm.value.document, value);
 
       if (isCpfValid || isCnpjValid) {
         this.cpfCnpjStatus = true;
@@ -216,7 +209,7 @@ export class AddUserComponent {
 
   async ngOnInit(): Promise<void> {
     const dataRole = await this.roleService.findRolesAll();
-    
+
     dataRole.forEach((role) => {
       this.roles.push(role);
     })
@@ -225,23 +218,23 @@ export class AddUserComponent {
   submitForm(): void {
     this.isLoadingOne = true;
 
-      this.createUserForm.email = this.validateForm.value?.email;
-      this.createUserForm.roles = this.validateForm.value?.roles;
-      this.createUserForm.firstName = this.validateForm.value?.firstname;
-      this.createUserForm.lastName = this.validateForm.value?.lastname;
-      this.createUserForm.userName = this.validateForm.value?.username;
-      this.createUserForm.password = this.validateForm.value?.password;
-      this.createUserForm.cnpjCpfRg = this.validateForm.value?.cpfcnpj;
-      this.createUserForm.roles = this.validateForm.value?.roles;
- 
-      // this.createUserForm.number = this.validateForm.value.number;
-      this.createUserForm.legalRegister = true;
-      this.createUserForm.password = this.validateForm.value.password;
-      if(this.validateForm.value.document === 'CPF'){
-        this.createUserForm.legalRegister = false;
-      }
+    this.createUserForm.email = this.validateForm.value?.email;
+    this.createUserForm.roles = this.validateForm.value?.roles;
+    this.createUserForm.firstName = this.validateForm.value?.firstname;
+    this.createUserForm.lastName = this.validateForm.value?.lastname;
+    this.createUserForm.userName = this.validateForm.value?.username;
+    this.createUserForm.password = this.validateForm.value?.password;
+    this.createUserForm.cnpjCpfRg = this.validateForm.value?.cpfcnpj;
+    this.createUserForm.roles = this.validateForm.value?.roles;
 
-     const response =  this.userService.add(this.createUserForm);
-   
+    // this.createUserForm.number = this.validateForm.value.number;
+    this.createUserForm.legalRegister = true;
+    this.createUserForm.password = this.validateForm.value.password;
+    if (this.validateForm.value.document === 'CPF') {
+      this.createUserForm.legalRegister = false;
+    }
+
+    const response = this.userService.add(this.createUserForm);
+
   }
 }
