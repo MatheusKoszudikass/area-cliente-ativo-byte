@@ -8,18 +8,15 @@
 :host {
   display: flex;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   height: 100vh;
   width: 100%;
   margin: 0;
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  background-color: #c9d6ff;
   background: linear-gradient(to right, #e2e2e2, #c9d6ff);
 }
+
 
 .container {
   background-color: #fff;
@@ -29,7 +26,6 @@
   overflow: hidden;
   justify-content: center;
   align-items: center;
-  margin: 0;
   width: 100vh;
   max-width: 100%;
   min-height: 480px;
@@ -54,6 +50,7 @@
     text-decoration: none;
     margin: 15px 0;
   }
+
 
   & button {
     background-color: #ffffff;
@@ -91,36 +88,22 @@
     width: 100%;
   }
 
-  & input {
-    background-color: #eee;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 22px;
-    font-size: 13px;
-    border-radius: 8px;
-    width: 100%;
-    outline: none;
-  }
-
   & nz-input-group {
-    background-color: #eee;
-    border: none;
+    display: flex;
     margin: 8px 15px;
-    padding: 0 5px;
+    padding: 0 10px;
     font-size: 13px;
     border-radius: 8px;
-    width: 100%;
+    width: auto;
     height: 40px;
-    outline: none;
   }
 
   & label {
-    display: flex;
+    position: relative;
     font-size: 15px;
     font: bold;
     letter-spacing: 0.5px;
-    margin: 0 210px 0 0;
-    padding: 0;
+    margin: 0 auto 0 0;
     color: black;
   }
 }
@@ -257,6 +240,14 @@ section {
   transform: translateX(200%);
 }
 
+// @media screen and (max-height: 769px) and (max-width: 585px) {
+//   .container { 
+//      & label {
+//        margin: 0 80px 0 0;
+//      }
+//   }
+// }
+
 @media screen and (max-width: 768px) {
   .container {
     background-color: #fff;
@@ -295,7 +286,7 @@ section {
     & button {
       background-color: transparent;
       color: #000000;
-      font-size: 12px;
+      font-size: 10px;
       padding: 0 20px;
       border: 1px solid #020202;
       text-align: center;
@@ -318,6 +309,15 @@ section {
       }
     }
 
+    & label {
+      display: flex;
+      font-size: 15px;
+      font: bold;
+      letter-spacing: 0.5px;
+      margin: 0 auto 0 0;
+      color: black;
+    }
+
     & form {
       background-color: #fff;
       display: flex;
@@ -327,21 +327,6 @@ section {
       padding: 0 40px;
       height: 100%;
     }
-
-    & input {
-      background-color: #eee;
-      border: none;
-      margin: 8px 0;
-      padding: 10px 15px;
-      font-size: 13px;
-      border-radius: 8px;
-      width: 100%;
-      outline: none;
-    }
-    
-    nz-checkbox  {
-    display: none;
-    }
   }
 
   .form-container {
@@ -349,15 +334,6 @@ section {
     top: 0;
     height: 100%;
     transition: all 0.6s ease-in-out;
-  }
-
-  .toggle-container {
-
-    .toggle-panel {
-      & img {
-        width: 85%;
-      }
-    }
   }
 
   .sign-in {
@@ -485,7 +461,6 @@ section {
     }
 
     & img {
-      display: none;
       width: 90%;
     }
   }
@@ -596,3 +571,5 @@ section {
     transform: translateY(200%);
   }
 }
+
+

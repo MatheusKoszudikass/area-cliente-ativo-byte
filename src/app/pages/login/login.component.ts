@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,13 +8,14 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CreateLogin } from '../../interfaces/create-login.interface';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
     selector: 'app-login',
     standalone: true,
     imports: [NzButtonModule,
         NzCheckboxModule, NzInputModule, NzIconModule, NzAlertModule,
-        ReactiveFormsModule],
+        ReactiveFormsModule, NzFormModule, NzButtonModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })
@@ -31,7 +32,6 @@ export class LoginComponent {
     emailUserName: '',
     password: '',
     remember: false,
-    menssage: ''
   };
 
   formValidadeLogin;
