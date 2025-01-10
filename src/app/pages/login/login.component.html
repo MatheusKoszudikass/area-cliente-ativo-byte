@@ -4,30 +4,22 @@
             <form nz-form [formGroup]="formValidadeLogin" class="login-form" (ngSubmit)="initiateLogin()">
                 <h1>Login</h1>
                 <span>Utilize seu e-mail ou nome do usuário é senha</span>
-                <nz-form-item>
-                    <nz-form-control [nzSm]="100" [nzXs]="100" nzErrorTip="Campo Obrigatório.">
-                        <nz-input-group nzPrefixIcon="user">
-                            <input type="text" nz-input formControlName="username" placeholder="E-mail/Usuário"
-                                name="email" required />
-                        </nz-input-group>
-                    </nz-form-control>
-                </nz-form-item>
 
-                <nz-form-item>
-                    <nz-form-control [nzSm]="100" [nzXs]="100" nzErrorTip="Campo Obrigatório.">
-                        <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
-                            <input [type]="passwordVisible ? 'text' : 'password'" nz-input placeholder="Password"
-                                formControlName="password" name="password" required />
-                        </nz-input-group>
-                        <label nz-checkbox formControlName="remember">Lembrar</label>
-                        <ng-template #suffixTemplate>
-                            <span nz-icon class="ant-input-password-icon"
-                                [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
-                                (click)="passwordVisible = !passwordVisible"></span>
-                        </ng-template>
-                    </nz-form-control>
-                </nz-form-item>
-                <button nz-button nzType="primary"  [disabled]="!formValidadeLogin.valid || isButtonDisabled"
+                <nz-input-group nzPrefixIcon="user">
+                    <input type="text" nz-input formControlName="username" placeholder="E-mail/Usuário" name="email"
+                        required />
+                </nz-input-group>
+
+                <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
+                    <input [type]="passwordVisible ? 'text' : 'password'" nz-input placeholder="Password"
+                        formControlName="password" name="password" required />
+                </nz-input-group>
+                <label nz-checkbox formControlName="remember">Lembrar</label>
+                <ng-template #suffixTemplate>
+                    <span nz-icon class="ant-input-password-icon" [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                        (click)="passwordVisible = !passwordVisible"></span>
+                </ng-template>
+                <button nz-button nzType="primary" [disabled]="!formValidadeLogin.valid || isButtonDisabled"
                     [nzLoading]="isLoadingOne"
                     [title]="formValidadeLogin.valid ? 'Entrar' : 'Preencha os campos E-mail/Usuário e Password'">Entrar</button>
             </form>
