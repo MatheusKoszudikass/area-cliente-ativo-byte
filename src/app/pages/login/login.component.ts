@@ -102,23 +102,8 @@ export class LoginComponent {
   public async initiateLogin(): Promise<void> {
     this.isLoadingOne = true;
     this.isButtonDisabled = true;
-
-    try {
-
-        const response = await this.onLogin();
-        if(response)
-        {
-          setTimeout(() => {
-            this.isLoadingOne = false;
-            this.isButtonDisabled = false;
-            this.router.navigate(['/home']);
-          }, 500);
-        }else {
-          this.isLoadingOne = false;
-        }
-    } finally {
-
-    }
+    await this.onLogin();
+    this.isLoadingOne = false;
   }
 
 /**
