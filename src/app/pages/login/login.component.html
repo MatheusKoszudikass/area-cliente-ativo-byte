@@ -14,11 +14,13 @@
                     <input [type]="passwordVisible ? 'text' : 'password'" nz-input placeholder="Password"
                         formControlName="password" name="password" required />
                 </nz-input-group>
-                <label nz-checkbox formControlName="remember">Lembrar</label>
+
                 <ng-template #suffixTemplate>
                     <span nz-icon class="ant-input-password-icon" [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
                         (click)="passwordVisible = !passwordVisible"></span>
                 </ng-template>
+                
+                <label nz-checkbox formControlName="remember">Lembrar</label>
                 <button nz-button nzType="primary" [disabled]="!formValidadeLogin.valid || isButtonDisabled"
                     [nzLoading]="isLoadingOne"
                     [title]="formValidadeLogin.valid ? 'Entrar' : 'Preencha os campos E-mail/Usuário e Password'">Entrar</button>
