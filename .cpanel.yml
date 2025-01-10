@@ -5,5 +5,5 @@ deployment:
     - export DEPLOYPATH=/home/ativobyt/cliente.ativobyte.com.br/
 
     # Copiar diretórios
-    - /bin/cp -R /home/ativobyt/repositories/area-cliente-ativo-byte/dist/area-cliente-ativo-byte/browser/ $DEPLOYPATH
+    - /bin/cp -R /home/ativobyt/repositories/area-cliente-ativo-byte/dist/area-cliente-ativo-byte/browser/* $DEPLOYPATH
 
