@@ -1,7 +1,23 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/dist
+.angular
+.vscode
+/coverage
+/node_modules
+/public
+/src
+/tests
+.editorconfig
+angular.json
+karma.conf.js
+package-lock.json
+package.json
+tsconfig.app.json
+tsconfig.json
+tsconfig.spec.json
+
+
 /tmp
 /out-tsc
 /bazel-out
