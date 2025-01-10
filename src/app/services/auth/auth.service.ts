@@ -142,20 +142,18 @@ export class AuthService {
    * @throws An error if the HTTP request fails.
    */
 
-  public async login(loginData: CreateLogin): Promise<ResponseLogin | null> {
+  public async login(loginData: CreateLogin): Promise<void> {
 
     try{
-      const response = await lastValueFrom(this.http.post<ResponseLogin>(`${this.apiUrl}/api/auth/login`,
+      const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/auth/login`,
         loginData, this.httpOptions));
   
       this.verifyLogin(response);
 
-      return response;
     }catch (error){
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
-      return null;
     }
   }
 
@@ -164,14 +162,14 @@ export class AuthService {
    * If the login was successful, navigates to the welcome page.
    * @param response - The response from the server.
    */
-  private verifyLogin(response: ResponseLogin) {
-    if (response.status) {
+  private verifyLogin(response: ResponseApi<null>) {
+    if (response.success) {
       this.notification.create(
         'success',
         'Login bem-sucedido!',
         `Login efetuado com sucesso!`
       );
-      this.router.navigate(['/welcome']);
+      this.router.navigate(['/home']);
     } else {
       this.notification.create(
         'error',
