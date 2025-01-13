@@ -1,7 +1,7 @@
 import { ResponseApi } from "../../../../src/app/interfaces/response-api.interface";
 import { ResponseLogin } from "../../../../src/app/interfaces/response-login.interface";
 
-export const REPONSE_VALID_ACTIVE_USER_JSON: ResponseApi<null> =
+export const RESPONSE_VALID_ACTIVE_USER_JSON: ResponseApi<null> =
 {
     "success": true,
     "message": "Token verificado com sucesso",
