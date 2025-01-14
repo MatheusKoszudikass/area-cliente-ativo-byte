@@ -11,7 +11,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RESPONSE_INVALID_API_JSON } from '../../../../tests/data/dataFixtures';
 import { REQUEST_CREATE_LOGIN_INVALID_JSON, REQUEST_CREATE_LOGIN_JSON, REQUEST_CREATE_LOGIN_VALID_JSON } from '../../../../tests/data/request/login/dataCreateLoginFixtures';
 
-
 describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
@@ -116,6 +115,7 @@ describe('AuthService', () => {
   });
 
   describe('recoveryAccount', () => {
+    
     it('should show warning if email is not provided', fakeAsync(() => {
       service.recoveryAccount(REQUEST_CREATE_LOGIN_JSON).then(response => {
         // console.log(notificationMock.create.calls.allArgs());

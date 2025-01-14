@@ -12,6 +12,7 @@ export const NOTIFICATION_INVALID_ACTIVE_USER_JSON = {
   message: RESPONSE_INVALID_ACTIVE_USER_JSON.message
 };
 
+
 export const NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON = {
   type: 'warning',
   title: 'Usuário!',
