@@ -6,7 +6,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzIconModule,  } from 'ng-zorro-antd/icon';
-import { NzIconTestModule } from 'ng-zorro-antd/icon/testing';
+import { provideNzIconsTesting } from 'ng-zorro-antd/icon/testing';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterModule } from '@angular/router';
@@ -25,8 +25,8 @@ describe('AddUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddUserComponent, RouterModule.forRoot([]), NoopAnimationsModule, NzIconTestModule],
-      providers: [provideNgxMask(), RoleService, provideHttpClient()]
+      imports: [AddUserComponent, RouterModule.forRoot([]), NoopAnimationsModule],
+      providers: [provideNgxMask(), RoleService, provideHttpClient(), provideNzIconsTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddUserComponent);  

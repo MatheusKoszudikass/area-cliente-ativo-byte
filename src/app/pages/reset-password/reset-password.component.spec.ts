@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NzIconTestModule } from 'ng-zorro-antd/icon/testing';
+import { provideNzIconsTesting } from 'ng-zorro-antd/icon/testing';
 import { ResetPasswordComponent } from './reset-password.component';
 import { RouterModule } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
@@ -11,8 +11,8 @@ describe('ResetPasswordComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ResetPasswordComponent, RouterModule.forRoot([]), NzIconTestModule],
-      providers: [provideHttpClient(), UserService]
+      imports: [ResetPasswordComponent, RouterModule.forRoot([])],
+      providers: [provideHttpClient(), UserService, provideNzIconsTesting()]
     })
     .compileComponents();
 

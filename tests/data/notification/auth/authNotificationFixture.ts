@@ -12,22 +12,23 @@ export const NOTIFICATION_INVALID_ACTIVE_USER_JSON = {
   message: RESPONSE_INVALID_ACTIVE_USER_JSON.message
 };
 
-export const NOTIFICATION_NULL_RECOVERY_JSON = {
+
+export const NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON = {
   type: 'warning',
   title: 'Usuário!',
   message: 'Insira um email'
 };
 
-export const NOTIFICATION_VALID_INVALID_RECOVERY_JSON = {
-  type: 'success',
-  title: 'Recuperação bem-sucedida',
-  message: 'Verifique seu email para redefinir sua senha'
-};
-
-export const NOTIFICATION_VALID_LOGIN_JSON = {
+export const NOTIFICATION_VALID_RECOVERY_JSON = {
   type: 'success',
   title: 'Login bem-sucedido!',
   message: 'Login efetuado com sucesso!'
+};
+
+export const NOTIFICATION_INVALID_RECOVERY_JSON = {
+  type: 'success',
+  title: 'Recuperação bem-sucedida',
+  message: 'Verifique seu email para redefinir sua senha'
 };
 
 export const NOTIFICATION_INVALID_LOGIN_JSON = {
