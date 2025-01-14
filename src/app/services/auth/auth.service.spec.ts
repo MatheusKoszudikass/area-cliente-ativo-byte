@@ -5,10 +5,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { environment } from '../../../environments/environment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NOTIFICATION_INVALID_ACTIVE_USER_JSON, NOTIFICATION_VALID_ACTIVE_USER_JSON } from '../../../../tests/data/notification/auth/authNotificationFixture';
-import { RESPONSE_INVALID_ACTIVE_USER_JSON, RESPONSE_VALID_ACTIVE_USER_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
+import { NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON, NOTIFICATION_INVALID_ACTIVE_USER_JSON, NOTIFICATION_VALID_ACTIVE_USER_JSON, NOTIFICATION_VALID_RECOVERY_JSON} from '../../../../tests/data/notification/auth/authNotificationFixture';
+import { RESPONSE_INVALID_ACTIVE_USER_JSON, RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_RECOVERY_ACCOUNT_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RESPONSE_INVALID_API_JSON } from '../../../../tests/data/dataFixtures';
+import { REQUEST_CREATE_LOGIN_INVALID_JSON, REQUEST_CREATE_LOGIN_JSON, REQUEST_CREATE_LOGIN_VALID_JSON } from '../../../../tests/data/request/login/dataCreateLoginFixtures';
 
 
 describe('AuthService', () => {
@@ -115,17 +116,64 @@ describe('AuthService', () => {
   });
 
   describe('recoveryAccount', () => {
-    it('should initiate account recovery with valid login details', async () => {
-      // Test implementation for recoveryAccount method
-    });
+    it('should show warning if email is not provided', fakeAsync(() => {
+      service.recoveryAccount(REQUEST_CREATE_LOGIN_JSON).then(response => {
+        // console.log(notificationMock.create.calls.allArgs());
+        expect(response).toBeNull();
+        expect(notificationMock.create).toHaveBeenCalledWith(
+          NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON.type,
+          NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON.title,
+          NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON.message
+        );
+      });
+    }));
+      
+    it('should initiate account recovery with valid login details', fakeAsync(() => {
+      service.recoveryAccount(REQUEST_CREATE_LOGIN_VALID_JSON).then(response => {
+        expect(response).toBeNull();
+        expect(notificationMock.create).toHaveBeenCalledWith(
+          NOTIFICATION_VALID_RECOVERY_JSON.type,
+          NOTIFICATION_VALID_RECOVERY_JSON.title,
+          NOTIFICATION_VALID_RECOVERY_JSON.message
+        );
+      });
 
-    it('should handle error during account recovery', async () => {
-      // Test implementation for error handling in recoveryAccount method
-    });
+      const request = httpMock.expectOne(req =>
+        req.method === 'POST' &&
+        req.url === `${environment.apiLogin}/api/auth/recovery-account` &&
+        req.body === REQUEST_CREATE_LOGIN_VALID_JSON &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('POST');
+      expect(request.request.body).toBe(REQUEST_CREATE_LOGIN_VALID_JSON);
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+      expect(request.request.headers.get('Set-Cookie')).toBeNull();
+      flush();
+    }));
 
-    it('should show warning if email is not provided', async () => {
-      // Test implementation for email validation in recoveryAccount method
-    });
+    it('should handle error during account recovery', fakeAsync(() => {
+      service.recoveryAccount(REQUEST_CREATE_LOGIN_VALID_JSON).then(error => {
+        expect(error).toBeNull();
+        expect(notificationMock.create).toHaveBeenCalledWith(
+          RESPONSE_INVALID_API_JSON.type,
+          RESPONSE_INVALID_API_JSON.title,
+          RESPONSE_INVALID_API_JSON.message
+        );
+      });
+
+      const request = httpMock.expectOne(req =>
+        req.method === 'POST' &&
+        req.url === `${environment.apiLogin}/api/auth/recovery-account` &&
+        req.body === REQUEST_CREATE_LOGIN_VALID_JSON &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('POST');
+      expect(request.request.body).toBe(REQUEST_CREATE_LOGIN_VALID_JSON);
+      request.flush(null, {status: 500, statusText: 'Internal Server Error'});
+    }));
   });
 
   describe('login', () => {
