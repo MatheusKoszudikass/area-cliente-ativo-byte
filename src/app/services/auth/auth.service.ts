@@ -52,6 +52,7 @@ export class AuthService {
         null, httpOptionsParams));
   
       this.verifyActiveUser(response);
+      
     }catch(error){
        this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
@@ -91,17 +92,9 @@ export class AuthService {
    */
 
   public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
-    
-     if(createLogin.emailUserName == null || createLogin.emailUserName == '') 
-     {
-      this.notification.create(
-        'warning',
-        'Usuário!',
-        'Insira um email',
-      ); 
-      return null;
-     }
 
+     if(!this.verifyEmailEmptyRecovery(createLogin.emailUserName)) return null;
+     
      try{
 
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/auth/recovery-account`,
@@ -118,6 +111,20 @@ export class AuthService {
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
         return null;
      }
+  }
+
+  private verifyEmailEmptyRecovery(emailUserName: string): boolean {
+    if(emailUserName === '')
+      {
+        this.notification.create(
+          'warning',
+          'Usuário!',
+          'Insira um email',
+        ); 
+        return false;
+      } 
+
+      return true;
   }
 
   /**
@@ -191,6 +198,7 @@ export class AuthService {
 
       const response = await lastValueFrom(this.http.get<boolean>(
         `${this.apiUrl}/api/auth/verify`, this.httpOptions));
+        console.log(response);
       return response;
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
