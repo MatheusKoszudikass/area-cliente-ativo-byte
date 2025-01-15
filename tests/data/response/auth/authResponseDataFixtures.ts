@@ -31,16 +31,17 @@ export const RESPONSE_INVALID_RECOVERY_ACCOUNT_JSON: string =
 
 export const RESPONSE_INVALID_LOGIN_JSON: ResponseApi<null> = {
 
-    "message": "Email ou senha incorretos",
-    "success": false,
-    "data": []
+    message: "Email ou senha incorretos",
+    success: false,
+    data: []
 };
 
-export const RESPONSE_VALID_LOGIN_JSON: string =
-    `{
-    "message": "Login realizado com sucesso",
-    "status": true
-}`;
+export const RESPONSE_VALID_LOGIN_JSON: ResponseApi<null> =
+{
+    message: "Login realizado com sucesso",
+    success: true,
+    data: []
+};
 
 export const RESPONSE_INVALID_FIND_USER_JSON: boolean =
     false;
