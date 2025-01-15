@@ -31,6 +31,12 @@ export const NOTIFICATION_INVALID_RECOVERY_JSON = {
   message: 'Verifique seu email para redefinir sua senha'
 };
 
+export const NOTIFICATION_VALID_LOGIN_JSON = {
+  type: 'success',
+  title: 'Login bem-sucedido!',
+  message: 'Login efetuado com sucesso!'
+};
+
 export const NOTIFICATION_INVALID_LOGIN_JSON = {
   type: 'error',
   title: 'Não foi possível efetuar o login',
