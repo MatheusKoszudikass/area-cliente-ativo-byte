@@ -7,12 +7,12 @@ import { environment } from '../../../environments/environment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ResponseApi } from '../../interfaces/response-api.interface';
 import { NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON, NOTIFICATION_INVALID_ACTIVE_USER_JSON, NOTIFICATION_INVALID_LOGIN_JSON, NOTIFICATION_VALID_ACTIVE_USER_JSON, NOTIFICATION_VALID_LOGIN_JSON, NOTIFICATION_VALID_RECOVERY_JSON } from '../../../../tests/data/notification/auth/authNotificationFixture';
-import { RESPONSE_INVALID_ACTIVE_USER_JSON, RESPONSE_INVALID_LOGIN_JSON, RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_LOGIN_JSON, RESPONSE_VALID_RECOVERY_ACCOUNT_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
+import { RESPONSE_INVALID_ACTIVE_USER_JSON, RESPONSE_INVALID_LOGIN_JSON, RESPONSE_INVALID_VERIFY_TOKEN_JSON, RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_LOGIN_JSON, RESPONSE_VALID_RECOVERY_ACCOUNT_JSON, RESPONSE_VALID_VERIFY_TOKEN_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RESPONSE_INVALID_API_JSON } from '../../../../tests/data/dataFixtures';
 import { REQUEST_CREATE_LOGIN_INVALID_JSON, REQUEST_CREATE_LOGIN_JSON, REQUEST_CREATE_LOGIN_VALID_JSON } from '../../../../tests/data/request/login/dataCreateLoginFixtures';
 import { Router } from '@angular/router';
-import { RESPONSE_HEADERS_TOKEN_SESSION_JSON } from '../../../../tests/dependencies/headers';
+import { RESPONSE_HEADERS_JSON, RESPONSE_HEADERS_TOKEN_SESSION_JSON } from '../../../../tests/dependencies/headers';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -265,13 +265,64 @@ describe('AuthService', () => {
   });
 
   describe('isVerifyToken', () => {
-    it('should verify if token is valid', async () => {
-      // Test implementation for isVerifyToken method
-    });
+    it('should verify if token is valid', fakeAsync(() => {
+      service.isAuthenticated().then(response => {
+        expect(response).toBeTrue();
+      });
 
-    it('should handle error during token verification', async () => {
-      // Test implementation for error handling in isVerifyToken method
-    });
+      const request = httpMock.expectOne(req =>
+        req.method === 'GET' &&
+        req.url === `${environment.apiLogin}/api/auth/verify` &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('GET');
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+      request.flush(RESPONSE_VALID_VERIFY_TOKEN_JSON, {headers: RESPONSE_HEADERS_JSON});
+      flush();
+    }));
+
+    it('should verify if token is invalid', fakeAsync(() => {
+      service.isAuthenticated().then(response => {
+        expect(response).toBeFalse();
+      });
+
+      const request = httpMock.expectOne(req =>
+        req.method === 'GET' &&
+        req.url === `${environment.apiLogin}/api/auth/verify` &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('GET');
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+      request.flush(RESPONSE_INVALID_VERIFY_TOKEN_JSON, {headers: RESPONSE_HEADERS_JSON});
+      flush();
+    }));
+
+    it('should handle error during token verification', fakeAsync(() => {
+      service.isAuthenticated().then(error => {
+        expect(error).toBeFalse();
+        expect(notificationMock.create).toHaveBeenCalledWith(
+          RESPONSE_INVALID_API_JSON.type,
+          RESPONSE_INVALID_API_JSON.title,
+          RESPONSE_INVALID_API_JSON.message
+        );
+      });
+
+      const request = httpMock.expectOne(req =>
+        req.method === 'GET' &&
+        req.url === `${environment.apiLogin}/api/auth/verify` &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('GET');
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+      request.flush(null, { status: 500, statusText: 'Internal Server Error' });
+      flush();
+    }));
   });
 
   describe('findUser', () => {
