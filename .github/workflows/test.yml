@@ -2,7 +2,7 @@ name: Agunlar CI
 
 on:
   push:
-    branches: [ "release" ]
+    branches: [ "release", "master" ]
   pull_request:
     branches: [ "master" ]
 
