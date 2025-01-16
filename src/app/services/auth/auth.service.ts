@@ -24,9 +24,9 @@ export class AuthService {
     withCredentials: true
   };
 
-  constructor(@Inject(DOCUMENT) private document: Document, 
-  private router: Router, private http: HttpClient,
-    private notification: NzNotificationService, private	cookiesService: CookiesService) { }
+  constructor(@Inject(DOCUMENT) private document: Document,
+    private router: Router, private http: HttpClient,
+    private notification: NzNotificationService, private cookiesService: CookiesService) { }
 
   /**
    * Activates a user account using the provided token.
@@ -36,10 +36,9 @@ export class AuthService {
    * @param token - The token used to activate the user account.
    * @returns A promise that resolves to the API response containing the activation status and message.
    */
-
   public async activeUser(token: string): Promise<void> {
 
-    try{
+    try {
 
       const params = new HttpParams().set('token', token);
 
@@ -47,15 +46,15 @@ export class AuthService {
         ...this.httpOptions,
         params
       }
-  
+
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/user/twoFactorAuth`,
         null, httpOptionsParams));
-  
+
       this.verifyActiveUser(response);
-      
-    }catch(error){
-       this.notification.create('error', 'API', 'Desculpe,' +
-        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+
+    } catch (error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
     }
   }
@@ -67,6 +66,7 @@ export class AuthService {
    * @param response - The response object containing the status and message from the API.
    */
   private verifyActiveUser(response: ResponseApi<null>): void {
+
     if (response.success == true) {
       this.notification.create(
         'success',
@@ -90,41 +90,40 @@ export class AuthService {
    * @param createLogin - An object containing the login details required for account recovery.
    * @returns A promise that resolves when the recovery process is complete.
    */
-
   public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
 
-     if(!this.verifyEmailEmptyRecovery(createLogin.emailUserName)) return null;
-     
-     try{
+    if (!this.verifyEmailEmptyRecovery(createLogin.emailUserName)) return null;
+
+    try {
 
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/auth/recovery-account`,
         createLogin, this.httpOptions))
-  
+
       this.verifyRecoveryAccount(response);
 
       return response;
 
-     }catch(erro)
-     {
+    } catch (erro) {
       this.notification.create('error', 'API', 'Desculpe,' +
-        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
-        return null;
-     }
+      return null;
+    }
   }
 
   private verifyEmailEmptyRecovery(emailUserName: string): boolean {
-    if(emailUserName === '')
-      {
-        this.notification.create(
-          'warning',
-          'Usuário!',
-          'Insira um email',
-        ); 
-        return false;
-      } 
 
-      return true;
+    if (emailUserName === '') {
+      this.notification.create(
+        'warning',
+        'Usuário!',
+        'Insira um email',
+      );
+      return false;
+    }
+
+    return true;
+
   }
 
   /**
@@ -133,12 +132,13 @@ export class AuthService {
    * @param response - The response from the recovery account endpoint.
    */
   private verifyRecoveryAccount(response: ResponseApi<null>): void {
+
     if (response != null)
       this.notification.create(
         'success',
         'Recuperação bem-sucedida',
         'Verifique seu email para redefinir sua senha',
-      )
+      );
   }
 
   /**
@@ -148,18 +148,18 @@ export class AuthService {
    * @returns A promise that resolves to a ResponseLogin object containing the status and message of the login attempt.
    * @throws An error if the HTTP request fails.
    */
-
   public async login(loginData: CreateLogin): Promise<void> {
 
-    try{
+    try {
+
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/auth/login`,
         loginData, this.httpOptions));
-  
+
       this.verifyLogin(response);
 
-    }catch (error){
+    } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
-        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
     }
   }
@@ -170,13 +170,16 @@ export class AuthService {
    * @param response - The response from the server.
    */
   private verifyLogin(response: ResponseApi<null>) {
+
     if (response.success) {
       this.notification.create(
         'success',
         'Login bem-sucedido!',
         `Login efetuado com sucesso!`
       );
+
       this.router.navigate(['/home']);
+
     } else {
       this.notification.create(
         'error',
@@ -192,66 +195,88 @@ export class AuthService {
    * @returns A promise that resolves to a boolean indicating whether the token is valid.
    *          Returns false if the request fails or if the token is invalid.
    */
-
   private async isVerifyToken(): Promise<boolean> {
     try {
 
       const response = await lastValueFrom(this.http.get<boolean>(
         `${this.apiUrl}/api/auth/verify`, this.httpOptions));
-        console.log(response);
+
       return response;
+
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
-        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
-        return false;
-    }
-  }
 
-  public async findUser(): Promise<ResponseApi<ResponseUserInterface> | null> {
-    
-    try{
-      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
-         this.httpOptions));
-
-      if(response.success === false) this.router.navigate(['/login']);
-
-      return response;
-
-    }catch(error) {
-      this.notification.create('error', 'API', 'Desculpe,' +
-        ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
-        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
-        return null;
+      return false;
     }
   }
 
   /**
-   * Logs out the user by sending a logout request to the server.
-   * Shows a notification on success or failure.
-   * @returns A promise that resolves to void.
+   * Finds the logged-in user by sending a GET request to the server.
+   *
+   * @returns A promise that resolves to the user object if the request is successful.
+   *          Returns null if the request fails or if the user is not logged in.
+   */
+  public async findUser(): Promise<ResponseApi<ResponseUserInterface> | null> {
+
+    try {
+
+      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
+        this.httpOptions));
+
+      if (response.success === false) this.router.navigate(['/login']);
+
+      return response;
+
+    } catch (error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+
+      return null;
+    }
+  }
+  /**
+   * Logs out the user by sending a GET request to the server.
+   *
+   * @returns A promise that resolves to void if the request is successful.
+   *          Returns null if the request fails or if the user is not logged in.
    */
   public async logout(): Promise<void> {
 
-      try{
-         const response = await lastValueFrom(this.http.get<ResponseApi<null>>(`${this.apiUrl}/api/auth/logout`,
-          this.httpOptions));
-          this.verifyLogout(response);
-      }catch(error) {
-        this.notification.create('error', 'API', 'Desculpe,' +
-          ' ocorreu um erro ao processar sua solicitação. Por favor, ' + 
-          'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
-      }
+    try {
+
+      const response = await lastValueFrom(this.http.get<ResponseApi<null>>(`${this.apiUrl}/api/auth/logout`,
+        this.httpOptions));
+
+      this.verifyLogout(response);
+
+    } catch (error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+    }
   }
 
+  /**
+   * Verifies the success of the logout process and displays a notification based on the result.
+   * If the logout process was successful, a success notification is displayed and the user is redirected to the login page.
+   * If the logout process fails, an error notification is displayed with an appropriate message.
+   * 
+   * @param response - The response from the logout endpoint.
+   */
   private verifyLogout(response: ResponseApi<null>): void {
+
     if (response) {
       this.notification.create(
         'success',
         'Logout bem-sucedido!',
         `Logout efetuado com sucesso!`
       );
+
       this.router.navigate(['/login']);
+
     } else {
       this.notification.create(
         'error',
@@ -267,6 +292,8 @@ export class AuthService {
    *          Returns false if the request fails or if the token is invalid.
    */
   public async isAuthenticated(): Promise<boolean> {
+
     return await this.isVerifyToken();
+    
   }
 }
