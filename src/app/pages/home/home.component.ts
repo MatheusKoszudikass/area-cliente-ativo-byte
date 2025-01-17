@@ -10,6 +10,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { AuthService } from '../../services/auth/auth.service';
 import { ResponseUserInterface } from '../../interfaces/response-user.interface';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
     selector: 'app-home',
@@ -38,16 +39,18 @@ export class HomeComponent {
     roles: []
   } 
   
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService,
+    private userService: UserService
+  ) { }
 
 
-  ngOnInit(): void{
+  private ngOnInit(): void{
     this.user();
     this.theme();
   }
 
-  async user(): Promise<void> {
-    const dados = await this.authService.findUser();
+  private async user(): Promise<void> {
+    const dados = await this.userService.findUserTokenSession();
 
     dados?.data.forEach((user) => {
       this.userObject = user;
