@@ -210,7 +210,7 @@ export class AddUserComponent {
   async ngOnInit(): Promise<void> {
     const dataRole = await this.roleService.findRolesAll();
 
-    dataRole.forEach((role) => {
+    dataRole?.data.forEach((role) => {
       this.roles.push(role);
     })
   }
