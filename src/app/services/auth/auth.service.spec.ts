@@ -1,18 +1,32 @@
 import { fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
-import { HttpHeaders, provideHttpClient } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { environment } from '../../../environments/environment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { ResponseApi } from '../../interfaces/response-api.interface';
-import { NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON, NOTIFICATION_INVALID_ACTIVE_USER_JSON, NOTIFICATION_INVALID_LOGIN_JSON, NOTIFICATION_VALID_ACTIVE_USER_JSON, NOTIFICATION_VALID_LOGIN_JSON, NOTIFICATION_VALID_RECOVERY_JSON } from '../../../../tests/data/notification/auth/authNotificationFixture';
-import { RESPONSE_INVALID_ACTIVE_USER_JSON, RESPONSE_INVALID_LOGIN_JSON, RESPONSE_INVALID_VERIFY_TOKEN_JSON, RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_LOGIN_JSON, RESPONSE_VALID_RECOVERY_ACCOUNT_JSON, RESPONSE_VALID_VERIFY_TOKEN_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
+import { NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON,
+NOTIFICATION_INVALID_ACTIVE_USER_JSON, 
+NOTIFICATION_INVALID_LOGIN_JSON, 
+NOTIFICATION_VALID_ACTIVE_USER_JSON, 
+NOTIFICATION_VALID_LOGIN_JSON, 
+NOTIFICATION_VALID_LOGOUT_JSON, 
+NOTIFICATION_VALID_RECOVERY_JSON } from '../../../../tests/data/notification/auth/authNotificationFixture';
+import { RESPONSE_INVALID_ACTIVE_USER_JSON,
+RESPONSE_INVALID_LOGIN_JSON, 
+RESPONSE_INVALID_VERIFY_TOKEN_JSON, 
+RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_LOGIN_JSON,
+RESPONSE_VALID_RECOVERY_ACCOUNT_JSON,
+RESPONSE_VALID_VERIFY_TOKEN_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RESPONSE_INVALID_API_JSON } from '../../../../tests/data/dataFixtures';
-import { REQUEST_CREATE_LOGIN_INVALID_JSON, REQUEST_CREATE_LOGIN_JSON, REQUEST_CREATE_LOGIN_VALID_JSON } from '../../../../tests/data/request/login/dataCreateLoginFixtures';
+import { REQUEST_CREATE_LOGIN_INVALID_JSON,
+REQUEST_CREATE_LOGIN_JSON, 
+REQUEST_CREATE_LOGIN_VALID_JSON } from '../../../../tests/data/request/login/dataCreateLoginFixtures';
 import { Router } from '@angular/router';
-import { RESPONSE_HEADERS_JSON, RESPONSE_HEADERS_TOKEN_SESSION_JSON } from '../../../../tests/dependencies/headers';
+import { RESPONSE_EMPTY_HEADERS_JSON, 
+RESPONSE_HEADERS_JSON,
+RESPONSE_HEADERS_TOKEN_SESSION_JSON } from '../../../../tests/dependencies/headers';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -266,7 +280,7 @@ describe('AuthService', () => {
 
   describe('isVerifyToken', () => {
     it('should verify if token is valid', fakeAsync(() => {
-      service.isAuthenticated().then(response => {
+      service.isVerifyToken().then(response => {
         expect(response).toBeTrue();
       });
 
@@ -284,7 +298,7 @@ describe('AuthService', () => {
     }));
 
     it('should verify if token is invalid', fakeAsync(() => {
-      service.isAuthenticated().then(response => {
+      service.isVerifyToken().then(response => {
         expect(response).toBeFalse();
       });
 
@@ -302,7 +316,7 @@ describe('AuthService', () => {
     }));
 
     it('should handle error during token verification', fakeAsync(() => {
-      service.isAuthenticated().then(error => {
+      service.isVerifyToken().then(error => {
         expect(error).toBeFalse();
         expect(notificationMock.create).toHaveBeenCalledWith(
           RESPONSE_INVALID_API_JSON.type,
@@ -325,33 +339,51 @@ describe('AuthService', () => {
     }));
   });
 
-  describe('findUser', () => {
-    it('should find user successfully', async () => {
-      // Test implementation for findUser method
-    });
-
-    it('should handle error during user finding', async () => {
-      // Test implementation for error handling in findUser method
-    });
-  });
-
   describe('logout', () => {
-    it('should logout user successfully', async () => {
-      // Test implementation for logout method
-    });
+    it('should logout user successfully', fakeAsync(() => {
+       service.logout().then(response => {
+         expect(response).toBeUndefined();
+         expect(notificationMock.create).toHaveBeenCalledWith(
+          NOTIFICATION_VALID_LOGOUT_JSON.type,
+          NOTIFICATION_VALID_LOGOUT_JSON.title,
+          NOTIFICATION_VALID_LOGOUT_JSON.message
+         );
+       });
 
-    it('should handle error during logout', async () => {
-      // Test implementation for error handling in logout method
-    });
-  });
+       const request = httpMock.expectOne(req =>
+        req.method === 'GET' &&
+        req.url === `${environment.apiLogin}/api/auth/logout` &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('GET');
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+      request.flush({headers: RESPONSE_EMPTY_HEADERS_JSON});
+      flush();
+    }));
 
-  describe('isAuthenticated', () => {
-    it('should return true if user is authenticated', async () => {
-      // Test implementation for isAuthenticated method
-    });
+    it('should handle error during logout', fakeAsync(() => {
+       service.logout().then(error => {
+         expect(error).toBeUndefined();
+         expect(notificationMock.create).toHaveBeenCalledWith(
+          RESPONSE_INVALID_API_JSON.type,
+          RESPONSE_INVALID_API_JSON.title,
+          RESPONSE_INVALID_API_JSON.message
+         );
+       });
 
-    it('should return false if user is not authenticated', async () => {
-      // Test implementation for isAuthenticated method
-    });
+       const request = httpMock.expectOne(req =>
+        req.method === 'GET' &&
+        req.url === `${environment.apiLogin}/api/auth/logout` &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('GET');
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+      request.flush(null, { status: 500, statusText: 'Internal Server Error' });
+      flush();
+    }));
   });
 });
