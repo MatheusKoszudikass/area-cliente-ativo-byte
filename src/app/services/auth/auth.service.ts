@@ -195,13 +195,11 @@ export class AuthService {
    * @returns A promise that resolves to a boolean indicating whether the token is valid.
    *          Returns false if the request fails or if the token is invalid.
    */
-  private async isVerifyToken(): Promise<boolean> {
+  public async isVerifyToken(): Promise<boolean> {
     try {
 
-      const response = await lastValueFrom(this.http.get<boolean>(
+      return await lastValueFrom(this.http.get<boolean>(
         `${this.apiUrl}/api/auth/verify`, this.httpOptions));
-
-      return response;
 
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
@@ -212,31 +210,6 @@ export class AuthService {
     }
   }
 
-  /**
-   * Finds the logged-in user by sending a GET request to the server.
-   *
-   * @returns A promise that resolves to the user object if the request is successful.
-   *          Returns null if the request fails or if the user is not logged in.
-   */
-  public async findUser(): Promise<ResponseApi<ResponseUserInterface> | null> {
-
-    try {
-
-      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
-        this.httpOptions));
-
-      if (response.success === false) this.router.navigate(['/login']);
-
-      return response;
-
-    } catch (error) {
-      this.notification.create('error', 'API', 'Desculpe,' +
-        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
-        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
-
-      return null;
-    }
-  }
   /**
    * Logs out the user by sending a GET request to the server.
    *
@@ -284,16 +257,5 @@ export class AuthService {
         'Desculpe, não foi possível efetuar o logout'
       );
     }
-  }
-  /**
-   * Checks if the user is authenticated by verifying the authentication token.
-   *
-   * @returns A promise that resolves to a boolean indicating whether the user is authenticated.
-   *          Returns false if the request fails or if the token is invalid.
-   */
-  public async isAuthenticated(): Promise<boolean> {
-
-    return await this.isVerifyToken();
-    
   }
 }

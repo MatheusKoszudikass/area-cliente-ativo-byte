@@ -7,6 +7,7 @@ import { ResponseApi } from '../../interfaces/response-api.interface';
 import { CreateUserInterface } from '../../interfaces/create-user-interface';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { RecoveryAccountInterface } from '../../interfaces/recovery-account-interface';
+import { ResponseUserInterface } from '../../interfaces/response-user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,32 @@ export class UserService {
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+    }
+  }
+  
+   /**
+   * Finds the logged-in user by sending a GET request to the server.
+   *
+   * @returns A promise that resolves to the user object if the request is successful.
+   *          Returns null if the request fails or if the user is not logged in.
+   */
+   public async findUserTokenSession(): Promise<ResponseApi<ResponseUserInterface> | null> {
+
+    try {
+
+      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
+        this.httpOptions));
+
+      if (response.success === false) this.router.navigate(['/login']);
+
+      return response;
+
+    } catch (error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+
+      return null;
     }
   }
   
