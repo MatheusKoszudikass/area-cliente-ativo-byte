@@ -42,3 +42,15 @@ export const NOTIFICATION_INVALID_LOGIN_JSON = {
   title: 'Não foi possível efetuar o login',
   message: RESPONSE_INVALID_LOGIN_JSON.message
 };
+
+export const NOTIFICATION_VALID_LOGOUT_JSON = {
+  type: 'success',
+  title: 'Logout bem-sucedido!',
+  message: 'Logout efetuado com sucesso!'
+};
+
+export const NOTIFICATION_INVALID_LOGOUT_JSON = {
+  type: 'error',
+  title: 'Não foi possível efetuar o logout',
+  message: 'Logout efetuado com sucesso!'
+}
