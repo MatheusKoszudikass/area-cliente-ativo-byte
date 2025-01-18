@@ -18,26 +18,62 @@ export class UserService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
     }),
+    withCredentials: true
   }
   constructor(private router: Router, private http: HttpClient,
     private notification: NzNotificationService
   ) { }
 
   public async add(user: CreateUserInterface): Promise<void> {
+
+    const propertiesToVerify: (keyof CreateUserInterface)[] = [ 
+      'email', 'password', 'firstName', 'lastName', 'cnpjCpfRg', 'legalRegister', 'userName'];
+      
+    if(this.verifyObjectProperties(user, propertiesToVerify)){ 
+      this.notificationInvalidUser();
+      return;
+    }
+    
     try {
 
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(
+      const response = await lastValueFrom(this.http.post<ResponseApi<null>>(
         `${this.apiUrl}/api/user/add`, user, this.httpOptions));
-
+        
       this.notificationOfUserRegistration(response);
 
     } catch (error) {
+      
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
     }
   }
-  
+
+  private notificationInvalidUser(): void {
+    this.notification.create(
+      'warning', 
+      'Usuário!', 
+      'Preencha todos os campos'
+    );
+  }
+
+  private notificationOfUserRegistration(response: ResponseApi<null>): void {
+
+    if (response.success === true) {
+      this.notification.create(
+        'success',
+        'Usuário!',
+        response.message,
+      );
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.notification.create(
+      'warning',
+       'Usuário!', 
+       response.message);
+  }
+
    /**
    * Finds the logged-in user by sending a GET request to the server.
    *
@@ -48,7 +84,8 @@ export class UserService {
 
     try {
 
-      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
+      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(
+        `${this.apiUrl}/api/user/findUserSession`,
         this.httpOptions));
 
       if (response.success === false) this.router.navigate(['/login']);
@@ -63,25 +100,15 @@ export class UserService {
       return null;
     }
   }
-  
-  private notificationOfUserRegistration(response: ResponseApi<any>): void {
-
-    if (response.success == true) {
-      this.notification.create(
-        'success',
-        'Usuário',
-        response.message,
-      );
-      this.router.navigate(['/login']);
-      return;
-    }
-    this.notification.create('error', 'Usuário', response.message);
-  }
 
   public async Exist(identifier: string | null | undefined): Promise<boolean> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${ this.apiUrl }/api/user/exist`, { identifier }, this.httpOptions));
+      
+      const response = await lastValueFrom(this.http.post<ResponseApi<null>>(
+        `${ this.apiUrl }/api/user/exist`, { identifier }, this.httpOptions));
+        
       return response.success;
+
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
@@ -117,13 +144,13 @@ export class UserService {
     if (response.success == true) {
       this.notification.create(
         'success',
-        'Usuário',
+        'Usuário!',
         response.message,
       );
       this.router.navigate(['/login']);
       return;
     }
-    this.notification.create('warning', 'Usuário', response.message);
+    this.notification.create('warning', 'Usuário!', response.message);
   }
 
 
@@ -191,5 +218,15 @@ export class UserService {
     };
 
     return calc(12) === parseInt(cnpj[12]) && calc(13) === parseInt(cnpj[13]);
+  }
+
+  private verifyObjectProperties<T>(object: T, properties: (keyof T)[]): boolean {
+    for(const property of properties) {
+      if(object[property] === null || object[property] === undefined 
+        || object[property] === '' ) {
+        return true;
+      }
+    }
+    return  false;
   }
 }
