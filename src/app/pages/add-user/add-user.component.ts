@@ -63,15 +63,15 @@ export class AddUserComponent {
     private userService: UserService, private cdr: ChangeDetectorRef) {
 
     this.validateForm = this.fb.group({
-      firstname: this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
-      lastname: this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
-      username: this.fb.control(
+      firstName: this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
+      lastName: this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
+      userName: this.fb.control(
         '',
         [Validators.required, Validators.maxLength(12), Validators.minLength(6)], [this.userNameValidator()],
       ),
       roles: this.fb.control([], [Validators.required]),
       document: this.fb.control('CPF'),
-      cpfcnpj: this.fb.control(
+      cnpjCpfRg: this.fb.control(
         '',
         [Validators.required, this.cpfCnpjValidator()],
       ),
@@ -215,26 +215,18 @@ export class AddUserComponent {
     })
   }
 
-  submitForm(): void {
+   async submitForm(): Promise<void> {
     this.isLoadingOne = true;
 
-    this.createUserForm.email = this.validateForm.value?.email;
-    this.createUserForm.roles = this.validateForm.value?.roles;
-    this.createUserForm.firstName = this.validateForm.value?.firstname;
-    this.createUserForm.lastName = this.validateForm.value?.lastname;
-    this.createUserForm.userName = this.validateForm.value?.username;
-    this.createUserForm.password = this.validateForm.value?.password;
-    this.createUserForm.cnpjCpfRg = this.validateForm.value?.cpfcnpj;
-    this.createUserForm.roles = this.validateForm.value?.roles;
+    this.createUserForm = {...this.validateForm.value};
 
-    // this.createUserForm.number = this.validateForm.value.number;
     this.createUserForm.legalRegister = true;
-    this.createUserForm.password = this.validateForm.value.password;
+
     if (this.validateForm.value.document === 'CPF') {
       this.createUserForm.legalRegister = false;
     }
 
-    const response = this.userService.add(this.createUserForm);
-
+    await this.userService.add(this.createUserForm);
+    this.isLoadingOne = false;
   }
 }
