@@ -48,7 +48,33 @@ export class UserService {
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
     }
   }
+  
+   /**
+   * Finds the logged-in user by sending a GET request to the server.
+   *
+   * @returns A promise that resolves to the user object if the request is successful.
+   *          Returns null if the request fails or if the user is not logged in.
+   */
+   public async findUserTokenSession(): Promise<ResponseApi<ResponseUserInterface> | null> {
 
+    try {
+
+      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
+        this.httpOptions));
+
+      if (response.success === false) this.router.navigate(['/login']);
+
+      return response;
+
+    } catch (error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+
+      return null;
+    }
+  }
+  
   private notificationInvalidUser(): void {
     this.notification.create(
       'warning', 
