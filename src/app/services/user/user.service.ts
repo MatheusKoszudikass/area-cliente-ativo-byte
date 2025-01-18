@@ -18,20 +18,31 @@ export class UserService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
     }),
+    withCredentials: true
   }
   constructor(private router: Router, private http: HttpClient,
     private notification: NzNotificationService
   ) { }
 
   public async add(user: CreateUserInterface): Promise<void> {
+
+    const propertiesToVerify: (keyof CreateUserInterface)[] = [ 
+      'email', 'password', 'firstName', 'lastName', 'cnpjCpfRg', 'legalRegister', 'userName'];
+      
+    if(this.verifyObjectProperties(user, propertiesToVerify)){ 
+      this.notificationInvalidUser();
+      return;
+    }
+    
     try {
 
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(
+      const response = await lastValueFrom(this.http.post<ResponseApi<null>>(
         `${this.apiUrl}/api/user/add`, user, this.httpOptions));
-
+        
       this.notificationOfUserRegistration(response);
 
     } catch (error) {
+      
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
@@ -64,24 +75,58 @@ export class UserService {
     }
   }
   
-  private notificationOfUserRegistration(response: ResponseApi<any>): void {
+/**
+ * Displays a warning notification indicating that all user fields must be filled in.
+ */
 
-    if (response.success == true) {
+  private notificationInvalidUser(): void {
+    this.notification.create(
+      'warning', 
+      'Usuário!', 
+      'Preencha todos os campos'
+    );
+  }
+
+  /**
+   * Displays a notification based on the response status of the user registration.
+   * If the response status is true, a success notification is displayed with the response message.
+   * If the response status is false, a warning notification is displayed with the response message.
+   * Navigates the user to the login page if the response status is true.
+   * @param response - The response object containing the status and message from the API.
+   */
+  private notificationOfUserRegistration(response: ResponseApi<null>): void {
+
+    if (response.success === true) {
       this.notification.create(
         'success',
-        'Usuário',
+        'Usuário!',
         response.message,
       );
       this.router.navigate(['/login']);
       return;
     }
-    this.notification.create('error', 'Usuário', response.message);
+    this.notification.create(
+      'warning',
+       'Usuário!', 
+       response.message);
   }
 
+
+  /**
+   * Checks if a user exists by sending a POST request to the server.
+   * 
+   * @param identifier - The identifier of the user to check.
+   * @returns A promise that resolves to true if the user exists, false otherwise.
+   *          Returns false if the request fails or if the user is not logged in.
+   */
   public async Exist(identifier: string | null | undefined): Promise<boolean> {
     try {
-      const response = await lastValueFrom(this.http.post<ResponseApi<any>>(`${ this.apiUrl }/api/user/exist`, { identifier }, this.httpOptions));
+      
+      const response = await lastValueFrom(this.http.post<ResponseApi<null>>(
+        `${ this.apiUrl }/api/user/exist`, { identifier }, this.httpOptions));
+        
       return response.success;
+
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
@@ -91,6 +136,13 @@ export class UserService {
     }
   }
 
+  /**
+   * Checks if a user password matches the current password by sending a POST request to the server.
+   * 
+   * @param recovery - The recovery object containing the current password and the new password.
+   * @returns A promise that resolves to true if the password matches, false otherwise.
+   *          Returns false if the request fails or if the user is not logged in.
+   */
   public async recoveryAccount(recovery: RecoveryAccountInterface): Promise<boolean> {
     try {
 
@@ -112,21 +164,36 @@ export class UserService {
     }
   }
 
+/**
+ * Displays a notification based on the success of the user account recovery process.
+ * If the recovery process is successful, a success notification is displayed and the user is redirected to the login page.
+ * If the recovery process fails, a warning notification is displayed with the response message.
+ * 
+ * @param response - The response from the password reset confirmation endpoint.
+ */
+
   private notificationOfUserRecovery(response: ResponseApi<any>): void {
 
     if (response.success == true) {
       this.notification.create(
         'success',
-        'Usuário',
+        'Usuário!',
         response.message,
       );
       this.router.navigate(['/login']);
       return;
     }
-    this.notification.create('warning', 'Usuário', response.message);
+    this.notification.create('warning', 'Usuário!', response.message);
   }
 
 
+  /**
+   * Checks if a document (CPF or CNPJ) is valid.
+   * 
+   * @param documentType - The type of document to validate, either 'CPF' or 'CNPJ'.
+   * @param document - The document number to validate.
+   * @returns True if the document is valid, false otherwise.
+   */
   public validationDocument(documentType: string | null | undefined,
     document: string | null | undefined): boolean {
     if (!document || document.trim().length === 0) return false
@@ -137,6 +204,13 @@ export class UserService {
     return this.validationCnpj(document);
   }
 
+  /**
+   * Checks if a CPF (Brazilian national ID) is valid.
+   * 
+   * @param cpf - The CPF number to validate.
+   * @returns True if the CPF is valid, false otherwise.
+   *          Displays an error notification if the CPF is invalid.
+   */
   private validationCpf(cpf: string | null | undefined): boolean {
 
     if (cpf?.length !== 11 || /^d(\d)\1{13}$/.test(cpf)) {
@@ -150,6 +224,12 @@ export class UserService {
     return false
   }
 
+  /**
+   * Checks if a CPF is valid by calculating the digits of the CPF using the modulo 11 algorithm.
+   * 
+   * @param cpf - The CPF number to validate.
+   * @returns True if the CPF is valid, false otherwise.
+   */
   private calculationValidationCPf(cpf: string): boolean {
     const calc = (x: number): number => {
       const total = cpf
@@ -191,5 +271,15 @@ export class UserService {
     };
 
     return calc(12) === parseInt(cnpj[12]) && calc(13) === parseInt(cnpj[13]);
+  }
+
+  private verifyObjectProperties<T>(object: T, properties: (keyof T)[]): boolean {
+    for(const property of properties) {
+      if(object[property] === null || object[property] === undefined 
+        || object[property] === '' ) {
+        return true;
+      }
+    }
+    return  false;
   }
 }

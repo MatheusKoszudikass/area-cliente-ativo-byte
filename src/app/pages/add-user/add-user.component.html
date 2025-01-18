@@ -8,17 +8,17 @@
           <h1>Cadastro</h1>
         </div>
         <div class="login-button">
-          <a nz-button nzType="primary" [nzLoading]="isLoadingOne" routerLink="/login">Entrar</a>
+          <a nz-button nzType="primary" routerLink="/login">Entrar</a>
         </div>
       </div>
 
       <div class="input-group">
         <div class="input-box">
-          <label for="firstname">Nome</label>
+          <label for="firstName">Nome</label>
           <nz-form-item>
             <nz-form-control [nzSm]="100" [nzXs]="100" nzErrorTip="Nome obrigatório">
               <nz-input-group nzPrefixIcon="user">
-                <input type="text" nz-input formControlName="firstname" name="firstname" placeholder="Primeiro nome"
+                <input type="text" nz-input formControlName="firstName" name="firstname" placeholder="Primeiro nome"
                   required>
               </nz-input-group>
             </nz-form-control>
@@ -26,11 +26,11 @@
         </div>
 
         <div class="input-box">
-          <label for="lastname">Sobrenome</label>
+          <label for="lastName">Sobrenome</label>
           <nz-form-item>
             <nz-form-control [nzSm]="100" [nzXs]="100" nzErrorTip="Sobrenome obrigatório">
               <nz-input-group nzPrefixIcon="user">
-                <input type="text" nz-input formControlName="lastname" name="lastname" placeholder="Segundo nome"
+                <input type="text" nz-input formControlName="lastName" name="lastname" placeholder="Segundo nome"
                   required>
               </nz-input-group>
             </nz-form-control>
@@ -38,11 +38,11 @@
         </div>
 
         <div class="input-box">
-          <label for="username">Usuário</label>
+          <label for="userName">Usuário</label>
           <nz-form-item>
-            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="validateForm.get('username')?.hasError('usernameExists') ? 'Usuário ja cadastrado' : ''">
+            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="validateForm.get('userName')?.hasError('usernameExists') ? 'Usuário ja cadastrado' : ''">
               <nz-input-group nzPrefixIcon="user">
-                <input type="text" nz-input formControlName="username" (blur)="onUserNameVerify()" name="username"
+                <input type="text" nz-input formControlName="userName" (blur)="onUserNameVerify()" name="username"
                   placeholder="Nome do usuário" required>
               </nz-input-group>
             </nz-form-control>
@@ -73,7 +73,7 @@
             </nz-form-control>
             <nz-form-item>
               <nz-form-control [nzSm]="20" [nzXs]="20" [nzErrorTip]="cpfCnpjStatus === false ? 'Documento inválido' : 'Campo obrigatório'">
-                <input id="cpfcnpj" type="text" nz-input formControlName="cpfcnpj" [mask]="mask" [placeholder]="mask"/>
+                <input id="cpfcnpj" type="text" nz-input formControlName="cnpjCpfRg" [mask]="mask" [placeholder]="mask"/>
               </nz-form-control>
             </nz-form-item>
           </nz-form-item>

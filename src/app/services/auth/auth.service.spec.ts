@@ -16,7 +16,6 @@ import { RESPONSE_INVALID_ACTIVE_USER_JSON,
 RESPONSE_INVALID_LOGIN_JSON, 
 RESPONSE_INVALID_VERIFY_TOKEN_JSON, 
 RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_LOGIN_JSON,
-RESPONSE_VALID_RECOVERY_ACCOUNT_JSON,
 RESPONSE_VALID_VERIFY_TOKEN_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RESPONSE_INVALID_API_JSON } from '../../../../tests/data/dataFixtures';
@@ -49,6 +48,7 @@ describe('AuthService', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     service = TestBed.inject(AuthService);
+    
   });
   
   describe('activeUser', () => {
