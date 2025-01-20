@@ -21,6 +21,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { UserService } from '../../services/user/user.service';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { of } from 'rxjs';
+import { DocumentsService } from '../../services/documents/documents.service';
 
 @Component({
   selector: 'app-add-user',
@@ -60,7 +61,8 @@ export class AddUserComponent {
 
   constructor(private fb: FormBuilder,
     private roleService: RoleService,
-    private userService: UserService, private cdr: ChangeDetectorRef) {
+    private userService: UserService, private cdr: ChangeDetectorRef,
+    private documentsService: DocumentsService) {
 
     this.validateForm = this.fb.group({
       firstName: this.fb.control('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
@@ -173,10 +175,10 @@ export class AddUserComponent {
         return null;
       }
 
-      const isCpfValid = value.length === 11 && this.userService.validationDocument(
+      const isCpfValid = value.length === 11 && this.documentsService.validationDocumentCpfCnpj(
         this.validateForm.value.document, value);
 
-      const isCnpjValid = value.length === 14 && this.userService.validationDocument(
+      const isCnpjValid = value.length === 14 && this.documentsService.validationDocumentCpfCnpj(
         this.validateForm.value.document, value);
 
       if (isCpfValid || isCnpjValid) {
