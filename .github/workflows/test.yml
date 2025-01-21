@@ -1,4 +1,4 @@
-name: Agunlar CI
+name: Teste unitários
 
 on:
   push:
