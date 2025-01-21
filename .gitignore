@@ -1,3 +1,4 @@
 /*/
+.push_dist_to_production.sh
 !dist/
 !.cpanel.yml
