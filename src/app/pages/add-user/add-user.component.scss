@@ -8,57 +8,6 @@
   background: linear-gradient(to right, #e2e2e2, #c9d6ff);
 }
 
-.Aviso {
-  position: fixed;
-  background-color: #f8d7da;
-  color: #721c24; 
-  padding: 15px 20px;
-  border: 1px solid #f5c6cb;
-  border-radius: 5px; 
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  z-index: 1000; 
-  width: auto; 
-  height: auto;
-}
-
-.Aviso h2 {
-  margin: 0 0 10px;
-  font-size: 16px;
-  color: #721c24;
-}
-
-.Aviso p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-.Aviso a {
-  color: #0056b3;
-  text-decoration: none;
-}
-
-.Aviso a:hover {
-  text-decoration: underline;
-}
-
-.Aviso button {
-  top: 10px;
-  right: 10px;
-  margin-top: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  color: #000000;
-}
-
-.Aviso button:hover {
-  color: #ffffff;
-  background: #000000;
-}
-
-
 section {
   width: auto;
   height: auto;
@@ -69,6 +18,7 @@ section {
   justify-content: center;
   background-color: white;
   align-items: center;
+  animation: fadeInUp 2s ease-out;
 }
 
 .form {
@@ -77,10 +27,8 @@ section {
   align-items: center;
   margin: 50px;
 }
+
 .form-header {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
@@ -89,19 +37,12 @@ section {
 .login-button {
   display: flex;
   align-items: center;
-  display: flex;
-  align-items: center;
+}
 
-  & a {
-    border: none;
-    padding: 0.4rem 1rem;
-    border-radius: 5px;
-  }
-  & a {
-    border: none;
-    padding: 0.4rem 1rem;
-    border-radius: 5px;
-  }
+.login-button a {
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
 }
 
 .form-header h1::after {
@@ -119,93 +60,22 @@ section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
 }
 
 .input-box {
   display: flex;
   flex-direction: column;
-  & input {
-    width: 10%;
-  }
+}
+
+.input-box input,
+.input-box nz-select {
+  width: 100%;
+  opacity: 0;
+  animation: fadeInLeft 0.6s ease-out 0.2s forwards;
 }
 
 .input-box label {
   margin-bottom: 5px;
-  margin-bottom: 5px;
-}
-
-.input-box input,
-.input-box nz-select {
-  width: 100%;
-  width: 100%;
-}
-
-.submit-button {
-  display: flex;
-  padding: 20px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  padding: 20px;
-  justify-content: center;
-  align-items: center;
-
-  & button {
-    border: none;
-    border-radius: 5px;
-  }
-  & button {
-    border: none;
-    border-radius: 5px;
-  }
-}
-
-[nz-form] {
-  max-width: 600px;
-  max-width: 600px;
-}
-
-nz-select {
-  margin: 0 8px 10px 0;
-  width: 120px;
-  margin: 0 8px 10px 0;
-  width: 120px;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Animação para os inputs */
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-section {
-  animation: fadeInUp 2s ease-out;
-}
-
-.input-box input,
-.input-box nz-select {
-  opacity: 0;
-  animation: fadeInLeft 0.6s ease-out 0.2s forwards;
 }
 
 .input-box:nth-child(1) input,
@@ -223,6 +93,49 @@ section {
   animation-delay: 1s;
 }
 
+.submit-button {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit-button button {
+  border: none;
+  border-radius: 5px;
+}
+
+[nz-form] {
+  max-width: 600px;
+}
+
+nz-select {
+  margin: 0 8px 10px 0;
+  width: 120px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @media screen and (max-width: 616px) {
   :host {
     height: auto;
@@ -231,7 +144,6 @@ section {
   .input-group {
     display: flex;
     flex-direction: column;
-    grid-template-columns: none;
     gap: 10px;
   }
 }
