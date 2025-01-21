@@ -8,6 +8,7 @@ import { loginGuard } from './guard/login/login.guard';
 import { AddUserComponent } from './pages/add-user/add-user.component';
 import { ProfileUserComponent } from './pages/profile-user/profile-user.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { resetPasswordGuard } from './guard/reset-password/reset-password.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'}, // Redireciona para login por padrão
@@ -18,7 +19,7 @@ export const routes: Routes = [
 
   { path: 'add-user', component: AddUserComponent},
 
-  { path: 'reset-password', component: ResetPasswordComponent},
+  { path: 'reset-password', component: ResetPasswordComponent, canActivate: [resetPasswordGuard] },
 
   { 
     path: 'home', 
