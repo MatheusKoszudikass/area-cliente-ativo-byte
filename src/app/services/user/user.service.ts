@@ -26,40 +26,41 @@ export class UserService {
 
   public async add(user: CreateUserInterface): Promise<void> {
 
-    const propertiesToVerify: (keyof CreateUserInterface)[] = [ 
+    const propertiesToVerify: (keyof CreateUserInterface)[] = [
       'email', 'password', 'firstName', 'lastName', 'cnpjCpfRg', 'legalRegister', 'userName'];
-      
-    if(this.verifyObjectProperties(user, propertiesToVerify)){ 
+
+    if (this.verifyObjectProperties(user, propertiesToVerify)) {
       this.notificationInvalidUser();
       return;
     }
-    
+
     try {
 
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(
         `${this.apiUrl}/api/user/add`, user, this.httpOptions));
-        
+
       this.notificationOfUserRegistration(response);
 
     } catch (error) {
-      
+
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
     }
   }
-  
-   /**
-   * Finds the logged-in user by sending a GET request to the server.
-   *
-   * @returns A promise that resolves to the user object if the request is successful.
-   *          Returns null if the request fails or if the user is not logged in.
-   */
-   public async findUserTokenSession(): Promise<ResponseApi<ResponseUserInterface> | null> {
+
+  /**
+  * Finds the logged-in user by sending a GET request to the server.
+  *
+  * @returns A promise that resolves to the user object if the request is successful.
+  *          Returns null if the request fails or if the user is not logged in.
+  */
+  public async findUserTokenSession(): Promise<ResponseApi<ResponseUserInterface> | null> {
 
     try {
 
-      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(`${this.apiUrl}/api/auth/findUser`,
+      const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(
+        `${this.apiUrl}/api/auth/findUser`,
         this.httpOptions));
 
       if (response.success === false) this.router.navigate(['/login']);
@@ -74,15 +75,15 @@ export class UserService {
       return null;
     }
   }
-  
-/**
- * Displays a warning notification indicating that all user fields must be filled in.
- */
+
+  /**
+   * Displays a warning notification indicating that all user fields must be filled in.
+   */
 
   private notificationInvalidUser(): void {
     this.notification.create(
-      'warning', 
-      'Usuário!', 
+      'warning',
+      'Usuário!',
       'Preencha todos os campos'
     );
   }
@@ -107,8 +108,8 @@ export class UserService {
     }
     this.notification.create(
       'warning',
-       'Usuário!', 
-       response.message);
+      'Usuário!',
+      response.message);
   }
 
 
@@ -121,10 +122,10 @@ export class UserService {
    */
   public async Exist(identifier: string | null | undefined): Promise<boolean> {
     try {
-      
+
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(
-        `${ this.apiUrl }/api/user/exist`, { identifier }, this.httpOptions));
-        
+        `${this.apiUrl}/api/user/exist`, { identifier }, this.httpOptions));
+
       return response.success;
 
     } catch (error) {
@@ -133,6 +134,31 @@ export class UserService {
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
 
       return false
+    }
+  }
+
+  /**
+   * Verifies if a user token for password recovery is valid by sending a GET request to the server.
+   * If the token is invalid, the user is redirected to the login page.
+   *
+   * @param token - The token used to verify the password recovery.
+   * @returns A promise that resolves when the verification process is complete.
+   *          Returns null if the request fails or if the user is not logged in.
+   */
+  public async verifyTokenRecoveryAccount(token: string): Promise<boolean>
+  {
+    try
+    {
+      const response = await lastValueFrom(this.http.get<boolean>(
+        `${this.apiUrl}/api/user/verifyTokenRecoveryAccount?token=${token}`, this.httpOptions));
+        
+        return response;
+
+    }catch(error) {
+      this.notification.create('error', 'API', 'Desculpe,' +
+        ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
+        'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+        return false;
     }
   }
 
@@ -147,12 +173,12 @@ export class UserService {
     try {
 
       const response = await lastValueFrom(
-        this.http.post<ResponseApi<any>>(`${ this.apiUrl } / api / user / confirmPasswordReset`,
+        this.http.post<ResponseApi<any>>(`${this.apiUrl}/api/user/confirmPasswordReset`,
           recovery, this.httpOptions));
 
       this.notificationOfUserRecovery(response);
 
-      if(response.success === true) return true;
+      if (response.success === true) return true;
 
       return false;
 
@@ -160,18 +186,17 @@ export class UserService {
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
-        return false;
+      return false;
     }
   }
 
-/**
- * Displays a notification based on the success of the user account recovery process.
- * If the recovery process is successful, a success notification is displayed and the user is redirected to the login page.
- * If the recovery process fails, a warning notification is displayed with the response message.
- * 
- * @param response - The response from the password reset confirmation endpoint.
- */
-
+  /**
+   * Displays a notification based on the success of the user account recovery process.
+   * If the recovery process is successful, a success notification is displayed and the user is redirected to the login page.
+   * If the recovery process fails, a warning notification is displayed with the response message.
+   * 
+   * @param response - The response from the password reset confirmation endpoint.
+   */
   private notificationOfUserRecovery(response: ResponseApi<any>): void {
 
     if (response.success == true) {
@@ -185,14 +210,14 @@ export class UserService {
     }
     this.notification.create('warning', 'Usuário!', response.message);
   }
-  
+
   private verifyObjectProperties<T>(object: T, properties: (keyof T)[]): boolean {
-    for(const property of properties) {
-      if(object[property] === null || object[property] === undefined 
-        || object[property] === '' ) {
+    for (const property of properties) {
+      if (object[property] === null || object[property] === undefined
+        || object[property] === '') {
         return true;
       }
     }
-    return  false;
+    return false;
   }
 }
