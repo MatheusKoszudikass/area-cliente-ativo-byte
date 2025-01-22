@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from '../../../environments/environment';
@@ -8,11 +8,13 @@ import { CreateUserInterface } from '../../interfaces/create-user-interface';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { RecoveryAccountInterface } from '../../interfaces/recovery-account-interface';
 import { ResponseUserInterface } from '../../interfaces/response-user.interface';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private authService = inject(AuthService);
   apiUrl: string = environment.apiLogin;
   httpOptions = {
     headers: new HttpHeaders({
@@ -60,10 +62,12 @@ export class UserService {
     try {
 
       const response = await lastValueFrom(this.http.get<ResponseApi<ResponseUserInterface>>(
-        `${this.apiUrl}/api/auth/findUser`,
+        `${this.apiUrl}/api/user/findUserSession`,
         this.httpOptions));
 
-      if (response.success === false) this.router.navigate(['/login']);
+      if (response.success === false) {
+        this.authService.logout();
+      }
 
       return response;
 
