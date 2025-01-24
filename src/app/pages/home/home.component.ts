@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, Input, input } from '@angular/core';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
@@ -11,6 +11,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { AuthService } from '../../services/auth/auth.service';
 import { ResponseUserInterface } from '../../interfaces/response-user.interface';
 import { UserService } from '../../services/user/user.service';
+import { UserValidators } from '../../validators/user/user.validators';
 
 @Component({
     selector: 'app-home',
@@ -25,6 +26,7 @@ import { UserService } from '../../services/user/user.service';
 export class HomeComponent {
   isCollapsed = false;
   isDarkThemeAndLight: boolean = true;
+  protected userValidators = inject(UserValidators)
   name: string = 'Juliana';
   colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
   color: string = this.colorList[0];
@@ -91,6 +93,7 @@ export class HomeComponent {
   }
 
   logout(){
+    this.userValidators.validateForm.reset();
     this.authService.logout();
   }
 }
