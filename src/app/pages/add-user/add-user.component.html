@@ -2,7 +2,7 @@
   <div class="form-img">
   </div>
   <div class="form">
-    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <form nz-form [formGroup]="this.userValidators.validateForm" (ngSubmit)="submitForm()">
       <div class="form-header">
         <div class="title">
           <h1>Cadastro</h1>
@@ -16,7 +16,10 @@
         <div class="input-box">
           <label for="firstName">Nome</label>
           <nz-form-item>
-            <nz-form-control [nzSm]="100" [nzXs]="100" nzErrorTip="Nome obrigatório">
+            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.
+            get('firstName')?.hasError('required') ? 'Nome obrigatório'
+            :this.userValidators.validateForm.get('firstName')?.hasError('minlength') ? 'Minimo de caracteres: 2'
+            :this.userValidators.validateForm.get('firstName')?.hasError('maxlength') ? 'Máximo de caracteres: 50' : ''">
               <nz-input-group nzPrefixIcon="user">
                 <input type="text" nz-input formControlName="firstName" name="firstname" placeholder="Primeiro nome"
                   required>
@@ -28,10 +31,13 @@
         <div class="input-box">
           <label for="lastName">Sobrenome</label>
           <nz-form-item>
-            <nz-form-control [nzSm]="100" [nzXs]="100" nzErrorTip="Sobrenome obrigatório">
+            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.
+            get('lastName')?.hasError('required') ? 'Sobrenome obrigatório'
+            : this.userValidators.validateForm.get('lastName')?.hasError('minlength') ? 'Minimo de caracteres: 2'
+            : this.userValidators.validateForm.get('lastName')?.hasError('maxlength') ? 'Máximo de caracteres: 50' : ''">
               <nz-input-group nzPrefixIcon="user">
                 <input type="text" nz-input formControlName="lastName" name="lastname" placeholder="Segundo nome"
-                  required>
+                  required />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -40,9 +46,13 @@
         <div class="input-box">
           <label for="userName">Usuário</label>
           <nz-form-item>
-            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="validateForm.get('userName')?.hasError('usernameExists') ? 'Usuário ja cadastrado' : ''">
+            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.get('userName')
+            ?.hasError('userNameExists') ? 'Usuário ja cadastrado'
+             : this.userValidators.validateForm.get('userName')?.hasError('required') ? 'Usuário obrigatório'
+             : this.userValidators.validateForm.get('userName')?.hasError('minlength') ? 'Minimo de caracteres: 6' 
+             : this.userValidators.validateForm.get('userName')?.hasError('maxlength') ? 'Máximo de caracteres: 12' : ''">
               <nz-input-group nzPrefixIcon="user">
-                <input type="text" nz-input formControlName="userName" (blur)="onUserNameVerify()" name="username"
+                <input type="text" nz-input formControlName="userName" (blur)="this.userValidators.userExists()" name="username"
                   placeholder="Nome do usuário" required>
               </nz-input-group>
             </nz-form-control>
@@ -52,7 +62,9 @@
         <div class="input-box">
           <label for="number">Celular</label>
           <nz-form-item>
-            <nz-form-control [nzSm]="100" [nzXs]="100" nzErrorTip="Celular obrigatório">
+            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.
+            get('number')?.hasError('required') ? 'Celular obrigatório'
+            : this.userValidators.validateForm.get('number')?.hasError('maxLength') ? 'Máximo de caracteres: 14' : ''">
               <nz-input-group nzPrefixIcon="phone">
                 <input type="text" nz-input formControlName="number" mask="(00) 00000-0000" name="number"
                   placeholder="(00) 00000-0000" required>
@@ -83,10 +95,10 @@
           <label for="roles">Funções</label>
           <nz-select nzLoading [nzMaxTagCount]="1" nzPlaceHolder="Selecione a função do usuário" nzMode="multiple"
             style="width: auto;" formControlName="roles">
-            @for(d of roles; track d){
+            @for(d of role; track d){
             <nz-option [nzValue]="d" [nzLabel]="d.name"></nz-option>
             }
-            @if (this.validateForm.get('roles')?.touched && this.validateForm.value.roles == []) {
+            @if (this.userValidators.validateForm.get('roles')?.touched && this.userValidators.validateForm.value.roles == []) {
             <span style="color: red;">Função obrigatória</span>
             }
           </nz-select>
@@ -95,22 +107,23 @@
         <div class="input-box">
           <label for="email">E-mail</label>
           <nz-form-item>
-            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="validateForm.get('email')?.hasError('emailExists') ? 'E-mail já cadastrado' : ''">
+            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="userValidators.validateForm.get('email')?.hasError('emailExists') ? 'E-mail já cadastrado' 
+            : this.userValidators.validateForm.get('email')?.hasError('required') ? 'E-mail obrigatório'
+            : this.userValidators.validateForm.get('email')?.hasError('email') ? 'E-mail inválido' : ''">
               <nz-input-group nzPrefixIcon="mail">
                 <input type="email" nz-input formControlName="email" 
-                (blur)="onUserEmailVerify()" name="email" placeholder="exemplo@exemplo.com" required>
-                 <span nz-icon nzType="sync" [nzSpin]="loadingEmail"></span>
+                (blur)="this.userValidators.emailValidator()" name="email" placeholder="exemplo@exemplo.com" required>
                 </nz-input-group>
-                <!-- @if(this.validateForm.get('email')?.touched && this.existEmail === true){
-                <span style="color: red;">E-mail já cadastrado</span>
-                } -->
             </nz-form-control>
           </nz-form-item>
         </div>
         <div class="input-box">
           <label for="password">Senha</label>
           <nz-form-item>
-            <nz-form-control [nzSm]="100" [nzXs]="100">
+            <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm
+            .get('password')?.hasError('required') ? 'Senha obrigatória'
+            : this.userValidators.validateForm.get('password')?.hasError('minlength') ? 'Minimo de caracteres: 8'
+            : this.userValidators.validateForm.get('password')?.hasError('maxlength') ? 'Máximo de caracteres: 20': ''">
               <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
                 <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="password"
                   placeholder="Senha" />
@@ -119,9 +132,6 @@
                 <span nz-icon class="ant-input-password-icon" [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
                   (click)="passwordVisible = !passwordVisible"></span>
               </ng-template>
-              @if (this.validateForm.get('password')?.touched && this.validateForm.value.password == '') {
-              <span style="color: red;">Senha obrigatória</span>
-              }
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -130,7 +140,8 @@
           <label for="password">Confirma senha</label>
           <nz-form-item>
             <nz-form-control [nzSm]="100" [nzXs]="100"  
-            [nzErrorTip]="validateForm.get('confirmPassword')?.hasError('passwordMismatch') ? 'As senhas não coincidem' : ''">
+            [nzErrorTip]="this.userValidators.validateForm.
+            get('confirmPassword')?.hasError('passwordMismatch') ? 'As senhas não coincidem' : ''">
               <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
                 <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="confirmPassword"
                   placeholder="Confirme sua senha" />
@@ -144,8 +155,8 @@
         </div>
       </div>
       <div class="submit-button">
-        <button nz-button nzType="primary" [disabled]="!validateForm.valid"
-        [title]="validateForm.valid ? 'Cadastrar' : 'Preencha os campos obrigatórios'" [nzLoading]="isLoadingOne">Cadastrar</button>
+        <button nz-button nzType="primary" [disabled]="!this.userValidators.validateForm.valid"
+        [title]="this.userValidators.validateForm.valid ? 'Cadastrar' : 'Preencha os campos obrigatórios'" [nzLoading]="isLoadingOne">Cadastrar</button>
       </div>
     </form>
   </div>
