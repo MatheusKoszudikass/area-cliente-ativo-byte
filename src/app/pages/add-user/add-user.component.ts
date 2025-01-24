@@ -20,8 +20,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { UserService } from '../../services/user/user.service';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { of } from 'rxjs';
-import { DocumentsService } from '../../services/documents/documents.service';
 import { UserValidators } from '../../validators/user/user.validators';
 
 @Component({

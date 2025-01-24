@@ -3,13 +3,12 @@
   height: 100%;
 }
 .light-mode .ant-layout {
-  background: #f0f2f5; /* Cor de fundo para o modo claro */
+  background: #f0f2f5;
   color: black;
 }
 
-/* Dark Mode */
 .dark-mode .ant-layout {
-  background: #3b3b3b; /* Cor de fundo para o modo escuro */
+  background: #3b3b3b;
   color: white;
 }
 
@@ -24,13 +23,13 @@
 }
 
 .app-header {
-  display: flex; /* Torna o app-header um contêiner flex */
-  align-items: center; /* Alinha os itens verticalmente */
-  justify-content: space-between; /* Espaça os itens para que fiquem nas extremidades */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: relative;
   width: 100%;
   height: 64px;
-  padding: 0 16px; /* Adiciona espaçamento horizontal */
+  padding: 0 16px; 
   background: #ffffff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 }
@@ -87,11 +86,11 @@ nz-header {
 }
 
 .app-header {
-  display: flex; /* Usar flexbox para alinhar os itens no cabeçalho */
-  justify-content: space-between; /* Distribuir os itens entre a esquerda e a direita */
-  align-items: center; /* Alinhar verticalmente os itens */
-  width: 100%; /* Garantir que o cabeçalho ocupe toda a largura */
-  height: 64px; /* Ajuste a altura do cabeçalho conforme necessário */
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%; 
+  height: 64px; 
   padding: 0;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 }
@@ -108,9 +107,9 @@ nz-header {
 
 .avatar {
   display: flex;
-  justify-content: flex-end; /* Alinha o avatar à direita */
+  justify-content: flex-end;
   padding: 0 24px;
-  padding-left: auto; /* Garante que o avatar se mova para a direita */
+  padding-left: auto;
 }
 
 nz-content {
@@ -122,18 +121,17 @@ nz-content {
   height: auto;
 }
 
-/* Estilizando a mensagem de construção */
 .construction-message {
-  position: fixed;   /* Fixa a mensagem na parte inferior */
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.8);  /* Fundo semitransparente */
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   text-align: center;
   padding: 10px;
   font-size: 14px;
-  z-index: 9999;  /* Garante que a mensagem fique acima de outros elementos */
+  z-index: 9999;
 }
 
 .construction-message p {
@@ -142,6 +140,6 @@ nz-content {
 
 .construction-message span {
   font-weight: bold;
-  color: #ffcc00;  /* Pode mudar para uma cor mais chamativa, se necessário */
+  color: #ffcc00;
 }
 
