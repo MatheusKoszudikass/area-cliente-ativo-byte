@@ -24,6 +24,9 @@
             <li nz-submenu nzOpen nzTitle="Mais opções" nzIcon="setting">
                 <ul>
                     <li nz-menu-item nzMatchRouter>
+                        <a routerLink="/home/profile-user"><span nz-icon nzType="user" nzTheme="outline"></span> Perfil do usuário</a>
+                    </li>
+                    <li nz-menu-item nzMatchRouter>
                         <a (click)="logout()"><span nz-icon nzType="logout" nzTheme="outline"></span> Sair</a>
                     </li>
                 </ul>
