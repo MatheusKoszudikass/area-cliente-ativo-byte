@@ -1,94 +1,154 @@
-/* styles.css */
-:host {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+section {
+  width: auto;
+  height: auto;
+  display: flex;
+  box-shadow: 10px 10px 10px 10px rgba(1, 9, 80, 0.212);
+  border-radius: 60px;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  align-items: center;
+  animation: fadeInUp 2s ease-out;
 }
 
-.profile-container {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 400px;
-    width: 100%;
+:host ::ng-deep .upload-list-inline .ant-upload-list-item {
+  float: left;
+  width: 200px;
+  margin-right: 8px;
+}
+:host ::ng-deep .upload-list-inline [class*='-upload-list-rtl'] .ant-upload-list-item {
+  float: right;
+}
+:host ::ng-deep .upload-list-inline .ant-upload-animate-enter {
+  animation-name: uploadAnimateInlineIn;
+}
+:host ::ng-deep .upload-list-inline .ant-upload-animate-leave {
+  animation-name: uploadAnimateInlineOut;
 }
 
-h1 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px;
 }
 
-.profile-form {
+.form-header {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+}
+
+.login-button a {
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
+}
+
+.form-header h1::after {
+  content: "";
+  display: block;
+  width: 5rem;
+  height: 0.3rem;
+  background-color: #ffa500;
+  margin: 0 auto;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.input-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-box input,
+.input-box nz-select {
+  width: 100%;
+  opacity: 0;
+  animation: fadeInLeft 0.6s ease-out 0.2s forwards;
+}
+
+.input-box label {
+  margin-bottom: 5px;
+}
+
+.input-box:nth-child(1) input,
+.input-box:nth-child(1) nz-select {
+  animation-delay: 0.5s;
+}
+
+.input-box:nth-child(2) input,
+.input-box:nth-child(2) nz-select {
+  animation-delay: 0.8s;
+}
+
+.input-box:nth-child(3) input,
+.input-box:nth-child(3) nz-select {
+  animation-delay: 1s;
+}
+
+.submit-button {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit-button button {
+  border: none;
+  border-radius: 5px;
+}
+
+[nz-form] {
+  max-width: 600px;
+}
+
+nz-select {
+  margin: 0 8px 10px 0;
+  width: 120px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media screen and (max-width: 1018px) {
+  :host {
+    height: auto;
+  }
+
+  .input-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-label {
-    font-weight: bold;
-    color: #555;
-}
-
-input, textarea {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-input:focus, textarea:focus {
-    border-color: #7d5fff;
-}
-
-textarea {
-    resize: none;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: space-between;
     gap: 10px;
-}
-
-button {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-save {
-    background-color: #7d5fff;
-    color: #fff;
-}
-
-.btn-save:hover {
-    background-color: #5a3fcc;
-}
-
-.btn-cancel {
-    background-color: #ddd;
-    color: #333;
-}
-
-.btn-cancel:hover {
-    background-color: #bbb;
+  }
 }

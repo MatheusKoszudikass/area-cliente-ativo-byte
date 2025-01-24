@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProfileUserComponent } from './profile-user.component';
 import { provideHttpClient } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideNzIconsTesting } from 'ng-zorro-antd/icon/testing';
 
 describe('ProfileUserComponent', () => {
   let component: ProfileUserComponent;
@@ -10,7 +12,7 @@ describe('ProfileUserComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProfileUserComponent],
-      providers: [provideHttpClient()]
+      providers: [provideHttpClient(), provideNoopAnimations(), provideNzIconsTesting()]
     })
     .compileComponents();
 

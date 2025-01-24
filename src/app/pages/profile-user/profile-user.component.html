@@ -1,40 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Perfil</title>
-</head>
-<body>
-    <div class="profile-container">
-        <h1>Editar Perfil</h1>
+<section>
+    <div class="form-img">
     </div>
-    <form class="profile-form" nz-form [formGroup]="this.userValidators.validateForm" (submit)="submitForm()">
-        <div class="form-group">
-            <label for="name">Nome</label>
-            <input type="text" nz-input formControlName="firstName" name="firstName" placeholder="Primeiro nome"/>
+    <div class="form">
+      <form nz-form [formGroup]="this.userValidators.validateForm" (ngSubmit)="submitForm()">
+        <div class="form-header">
+          <div class="title">
+            <h1>Editar Perfil</h1>
+          </div>
         </div>
-        <div class="form-group">
-            <label for="name">Sobrenome</label>
-            <input type="text" nz-input formControlName="lastName" name="lastName" placeholder="Segundo nome"/>
+
+        <div class="input-group">
+          <nz-upload
+          class="avatar-uploader"
+          nzAction="http://localhost:4200/img/avatarUser"
+          nzName="avatar"
+          nzListType="picture-card"
+          [nzDisabled]="true"
+          [title]="'Em construção'" 
+          [nzShowUploadList]="false"
+          [nzBeforeUpload]="beforeUpload"
+          (nzChange)="handleChange($event)"
+        >
+          @if (!avatarUrl) {
+            <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></span>
+            <div class="ant-upload-text">Upload</div>
+          } @else {
+            <img [src]="avatarUrl" style="width: 100%" />
+          }
+        </nz-upload>
         </div>
-        <div class="form-group">
-            <label for="name">Usuário</label>
-            <input type="text" nz-input formControlName="userName" name="userName" placeholder="Nome do usuário"/>
+
+        <div class="input-group">
+          <div class="input-box">
+            <label for="firstName">Nome</label>
+            <nz-form-item>
+              <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.
+              get('firstName')?.hasError('required') ? 'Nome obrigatório'
+              :this.userValidators.validateForm.get('firstName')?.hasError('minlength') ? 'Minimo de caracteres: 2'
+              :this.userValidators.validateForm.get('firstName')?.hasError('maxlength') ? 'Máximo de caracteres: 50' : ''">
+                <nz-input-group nzPrefixIcon="user">
+                  <input type="text" nz-input formControlName="firstName" name="firstname" placeholder="Primeiro nome"
+                    required>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+  
+          <div class="input-box">
+            <label for="lastName">Sobrenome</label>
+            <nz-form-item>
+              <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.
+              get('lastName')?.hasError('required') ? 'Sobrenome obrigatório'
+              : this.userValidators.validateForm.get('lastName')?.hasError('minlength') ? 'Minimo de caracteres: 2'
+              : this.userValidators.validateForm.get('lastName')?.hasError('maxlength') ? 'Máximo de caracteres: 50' : ''">
+                <nz-input-group nzPrefixIcon="user">
+                  <input type="text" nz-input formControlName="lastName" name="lastname" placeholder="Segundo nome"
+                    required />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+  
+          <div class="input-box">
+            <label for="userName">Usuário</label>
+            <nz-form-item>
+              <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.get('userName')
+              ?.hasError('userNameExists') ? 'Usuário ja cadastrado'
+               : this.userValidators.validateForm.get('userName')?.hasError('required') ? 'Usuário obrigatório'
+               : this.userValidators.validateForm.get('userName')?.hasError('minlength') ? 'Minimo de caracteres: 6' 
+               : this.userValidators.validateForm.get('userName')?.hasError('maxlength') ? 'Máximo de caracteres: 12' : ''">
+                <nz-input-group nzPrefixIcon="user">
+                  <input type="text" nz-input formControlName="userName" (blur)="this.userValidators.userExists()" name="username"
+                    placeholder="Nome do usuário" required>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+  
+          <div class="input-box">
+            <label for="number">Celular</label>
+            <nz-form-item>
+              <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="this.userValidators.validateForm.
+              get('number')?.hasError('required') ? 'Celular obrigatório'
+              : this.userValidators.validateForm.get('number')?.hasError('maxLength') ? 'Máximo de caracteres: 14' : ''">
+                <nz-input-group nzPrefixIcon="phone">
+                  <input type="text" nz-input formControlName="number" mask="(00) 00000-0000" name="number"
+                    placeholder="(00) 00000-0000" required>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+  
+          <div class="input-box">
+            <label for="document">Documento </label>
+            <nz-form-item>
+              <nz-form-control [nzSm]="7" [nzXs]="7">
+                <nz-select id="document" formControlName="document" (ngModelChange)="onDocumentChange($event)"
+                  style="width: auto;">
+                  <nz-option nzValue="CPF" nzLabel="CPF"></nz-option>
+                  <nz-option nzValue="CNPJ" nzLabel="CNPJ"></nz-option>
+                </nz-select>
+              </nz-form-control>
+              <nz-form-item>
+                <nz-form-control [nzSm]="20" [nzXs]="20" [nzErrorTip]="cpfCnpjStatus === false ? 'Documento inválido' : 'Campo obrigatório'">
+                  <input id="cpfcnpj" type="text" nz-input formControlName="cnpjCpfRg" [mask]="mask" [placeholder]="mask"/>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-form-item>
+          </div>
+  
+          <div class="input-box">
+            <label for="roles">Funções</label>
+            <nz-select nzLoading [nzMaxTagCount]="1" nzPlaceHolder="Selecione a função do usuário" nzMode="multiple"
+              style="width: auto;" formControlName="roles" >
+              @for(d of role; track d){
+              <nz-option [nzValue]="d" [nzLabel]="d.name"></nz-option>
+              }
+            </nz-select>
+          </div>
+  
+          <div class="input-box">
+            <label for="email">E-mail</label>
+            <nz-form-item>
+              <nz-form-control [nzSm]="100" [nzXs]="100" [nzErrorTip]="userValidators.validateForm.get('email')?.hasError('emailExists') ? 'E-mail já cadastrado' 
+              : this.userValidators.validateForm.get('email')?.hasError('required') ? 'E-mail obrigatório'
+              : this.userValidators.validateForm.get('email')?.hasError('email') ? 'E-mail inválido' : ''">
+                <nz-input-group nzPrefixIcon="mail">
+                  <input type="email" nz-input formControlName="email" 
+                  (blur)="this.userValidators.emailValidator()" name="email" placeholder="exemplo@exemplo.com" required>
+                  </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
-        <div class="form-group">
-            <label for="name">Celular</label>
-            <input type="text" nz-input formControlName="number" name="number" placeholder="(00) 00000-0000"/>
+        <div class="submit-button">
+          <button nz-button nzType="primary" [disabled]="!this.userValidators.validateForm.valid"
+          [title]="this.userValidators.validateForm.valid ? 'Salvar' : 'Em construção'" [nzLoading]="isLoadingOne">Salvar</button>
         </div>
-        <div class="form-group">
-            <label for="name">E-mail</label>
-            <input type="text" nz-input formControlName="email" name="email" placeholder="exemplo@exemplo.com"/>
-        </div>
-        <div class="form-group">
-            <label for="name">Funções</label>
-            <input type="text" nz-input formControlName="roles" name="roles" placeholder="Selecione a função do usuário"/>
-        </div>
-        <button nz-button nzType="primary" [disabled]="!this.userValidators.validateForm.valid">Salvar</button>
-    </form>
-</body>
-</html>
+      </form>
+    </div>
+  </section>
