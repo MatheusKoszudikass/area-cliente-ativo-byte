@@ -16,14 +16,10 @@ export class CpfService {
    */
   public validationCpf(cpf: string | null | undefined): boolean {
 
-    if (cpf?.length !== 11 || /^d(\d)\1{13}$/.test(cpf)) {
-      this.notification.create('error', 'Documento', 'CPF precisa de 11 dígitos');
-      return false
-    }
-    if (this.calculationValidationCPf(cpf)) {
-      return true
-    }
-    this.notification.create('error', 'Documento', 'CPF Inválido ');
+    if (cpf?.length !== 11 || /^d(\d)\1{13}$/.test(cpf)) return false
+  
+    if (this.calculationValidationCPf(cpf)) return true
+  
     return false
   }
 
