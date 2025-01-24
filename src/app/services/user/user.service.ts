@@ -26,14 +26,14 @@ export class UserService {
     private notification: NzNotificationService
   ) { }
 
-  public async add(user: CreateUserInterface): Promise<void> {
+  public async add(user: CreateUserInterface): Promise<boolean> {
 
     const propertiesToVerify: (keyof CreateUserInterface)[] = [
       'email', 'password', 'firstName', 'lastName', 'cnpjCpfRg', 'legalRegister', 'userName'];
 
     if (this.verifyObjectProperties(user, propertiesToVerify)) {
       this.notificationInvalidUser();
-      return;
+      return false;
     }
 
     try {
@@ -42,12 +42,14 @@ export class UserService {
         `${this.apiUrl}/api/user/add`, user, this.httpOptions));
 
       this.notificationOfUserRegistration(response);
-
+      return response.success;
     } catch (error) {
 
       this.notification.create('error', 'API', 'Desculpe,' +
         ' ocorreu um erro ao processar sua solicitação. Por favor, ' +
         'tente novamente mais tarde ou contate nosso suporte para obter ajuda.');
+
+      return false
     }
   }
 

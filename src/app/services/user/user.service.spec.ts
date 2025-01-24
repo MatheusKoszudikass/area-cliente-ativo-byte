@@ -40,7 +40,7 @@ describe('UserService', () => {
 
     it('should call add with the correct parameters', fakeAsync(() => {
       service.add(REQUEST_VALID_CREATE_USER_JSON).then(response => {
-        expect(response).toBeUndefined();
+        expect(response).toBeTrue();
 
         expect(nzNotificationMock.create).toHaveBeenCalledWith(
           NOTIFICATION_VALID_ADD_USER_JSON.type,
@@ -68,7 +68,7 @@ describe('UserService', () => {
 
     it('should  call add with the incorrect parameters', fakeAsync(() => {
       service.add(REQUEST_INVALID_CREATE_USER_JSON).then(error => {
-        expect(error).toBeUndefined();
+        expect(error).toBeFalse();
         expect(nzNotificationMock.create).toHaveBeenCalledWith(
           NOTIFICATION_INVALID_ADD_USER_JSON.type,
           NOTIFICATION_INVALID_ADD_USER_JSON.title,
@@ -95,7 +95,7 @@ describe('UserService', () => {
 
     it('should handle error during add', fakeAsync(() => {
       service.add(REQUEST_INVALID_CREATE_USER_JSON).then(error => {
-        expect(error).toBeUndefined();
+        expect(error).toBeFalse();
         expect(nzNotificationMock.create).toHaveBeenCalledWith(
           RESPONSE_INVALID_API_JSON.type,
           RESPONSE_INVALID_API_JSON.title,
