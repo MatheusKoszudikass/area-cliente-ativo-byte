@@ -1,1 +1,40 @@
-<p>profile-user works!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil</title>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Editar Perfil</h1>
+    </div>
+    <form class="profile-form" nz-form [formGroup]="this.userValidators.validateForm" (submit)="submitForm()">
+        <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" nz-input formControlName="firstName" name="firstName" placeholder="Primeiro nome"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Sobrenome</label>
+            <input type="text" nz-input formControlName="lastName" name="lastName" placeholder="Segundo nome"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Usuário</label>
+            <input type="text" nz-input formControlName="userName" name="userName" placeholder="Nome do usuário"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Celular</label>
+            <input type="text" nz-input formControlName="number" name="number" placeholder="(00) 00000-0000"/>
+        </div>
+        <div class="form-group">
+            <label for="name">E-mail</label>
+            <input type="text" nz-input formControlName="email" name="email" placeholder="exemplo@exemplo.com"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Funções</label>
+            <input type="text" nz-input formControlName="roles" name="roles" placeholder="Selecione a função do usuário"/>
+        </div>
+        <button nz-button nzType="primary" [disabled]="!this.userValidators.validateForm.valid">Salvar</button>
+    </form>
+</body>
+</html>

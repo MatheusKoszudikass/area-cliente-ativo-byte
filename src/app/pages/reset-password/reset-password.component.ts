@@ -11,7 +11,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { UserService } from '../../services/user/user.service';
-import { passwordMatchValidator } from '../../validators/passwordMatchValidator-validators';
+import { passwordMatchValidator } from '../../validators/password.match.validators';
 import { RecoveryAccountInterface } from '../../interfaces/recovery-account-interface';
 
 @Component({
