@@ -104,6 +104,7 @@ export class LoginComponent {
     this.isButtonDisabled = true;
     await this.onLogin();
     this.isLoadingOne = false;
+    this.isButtonDisabled = false;
   }
 
 /**
