@@ -13,10 +13,10 @@ NOTIFICATION_VALID_LOGIN_JSON,
 NOTIFICATION_VALID_LOGOUT_JSON, 
 NOTIFICATION_VALID_RECOVERY_JSON } from '../../../../tests/data/notification/auth/authNotificationFixture';
 import { RESPONSE_INVALID_ACTIVE_USER_JSON,
+  RESPONSE_INVALID_CHECK_USER_SESSION_TOKEN_JSON,
 RESPONSE_INVALID_LOGIN_JSON, 
-RESPONSE_INVALID_VERIFY_TOKEN_JSON, 
-RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_LOGIN_JSON,
-RESPONSE_VALID_VERIFY_TOKEN_JSON } from '../../../../tests/data/response/auth/authResponseDataFixtures';
+RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_CHECK_USER_SESSION_TOKEN_JSON, RESPONSE_VALID_LOGIN_JSON,
+} from '../../../../tests/data/response/auth/authResponseDataFixtures';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RESPONSE_INVALID_API_JSON } from '../../../../tests/data/dataFixtures';
 import { REQUEST_CREATE_LOGIN_INVALID_JSON,
@@ -73,8 +73,6 @@ describe('AuthService', () => {
       expect(request.request.method).toBe('POST');
       expect(request.request.body).toBeNull();
       expect(request.request.headers.get('Content-Type')).toBe('application/json');
-      expect(request.request.headers.get)
-      expect(request.request.withCredentials).toBeTrue();
       expect(request.request.headers.get('Set-Cookie')).toBeNull();
 
       request.flush(RESPONSE_INVALID_ACTIVE_USER_JSON);
@@ -140,7 +138,6 @@ describe('AuthService', () => {
     
     it('should show warning if email is not provided', fakeAsync(() => {
       service.recoveryAccount(REQUEST_CREATE_LOGIN_JSON).then(response => {
-        // console.log(notificationMock.create.calls.allArgs());
         expect(response).toBeNull();
         expect(notificationMock.create).toHaveBeenCalledWith(
           NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON.type,
@@ -278,9 +275,9 @@ describe('AuthService', () => {
     }));
   });
 
-  describe('isVerifyToken', () => {
+  describe('isCheckUserSessionToken', () => {
     it('should verify if token is valid', fakeAsync(() => {
-      service.isVerifyToken().then(response => {
+      service.isCheckUserSessionToken().then(response => {
         expect(response).toBeTrue();
       });
 
@@ -293,12 +290,12 @@ describe('AuthService', () => {
       expect(request.request.method).toBe('GET');
       expect(request.request.headers.get('Content-Type')).toBe('application/json');
       expect(request.request.withCredentials).toBeTrue();
-      request.flush(RESPONSE_VALID_VERIFY_TOKEN_JSON, {headers: RESPONSE_HEADERS_JSON});
+      request.flush(RESPONSE_VALID_CHECK_USER_SESSION_TOKEN_JSON, {headers: RESPONSE_HEADERS_JSON});
       flush();
     }));
 
     it('should verify if token is invalid', fakeAsync(() => {
-      service.isVerifyToken().then(response => {
+      service.isCheckUserSessionToken().then(response => {
         expect(response).toBeFalse();
       });
 
@@ -311,12 +308,12 @@ describe('AuthService', () => {
       expect(request.request.method).toBe('GET');
       expect(request.request.headers.get('Content-Type')).toBe('application/json');
       expect(request.request.withCredentials).toBeTrue();
-      request.flush(RESPONSE_INVALID_VERIFY_TOKEN_JSON, {headers: RESPONSE_HEADERS_JSON});
+      request.flush(RESPONSE_INVALID_CHECK_USER_SESSION_TOKEN_JSON, {headers: RESPONSE_HEADERS_JSON});
       flush();
     }));
 
     it('should handle error during token verification', fakeAsync(() => {
-      service.isVerifyToken().then(error => {
+      service.isCheckUserSessionToken().then(error => {
         expect(error).toBeFalse();
         expect(notificationMock.create).toHaveBeenCalledWith(
           RESPONSE_INVALID_API_JSON.type,
