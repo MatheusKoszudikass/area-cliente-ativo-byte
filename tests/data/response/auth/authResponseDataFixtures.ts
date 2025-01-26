@@ -1,5 +1,4 @@
 import { ResponseApi } from "../../../../src/app/interfaces/response-api.interface";
-import { ResponseLogin } from "../../../../src/app/interfaces/response-login.interface";
 import { ResponseUserInterface } from "../../../../src/app/interfaces/response-user.interface";
 
 export const RESPONSE_VALID_ACTIVE_USER_JSON: ResponseApi<null> =
@@ -44,7 +43,12 @@ export const RESPONSE_VALID_LOGIN_JSON: ResponseApi<null> =
     data: []
 };
 
-export const RESPONSE_INVALID_FIND_USER_JSON: boolean = false;
+export const RESPONSE_INVALID_FIND_USER_JSON: ResponseApi<ResponseUserInterface> = 
+{
+    success: false,
+    message: "Usuário nao encontrado",
+    data: []
+};
 
 export const RESPONSE_VALID_FIND_USER_JSON: ResponseApi<ResponseUserInterface> =
 {
@@ -64,11 +68,10 @@ export const RESPONSE_VALID_FIND_USER_JSON: ResponseApi<ResponseUserInterface> =
     ]
 };
 
+export const RESPONSE_INVALID_CHECK_USER_SESSION_TOKEN_JSON: boolean = false;
+
+export const RESPONSE_VALID_CHECK_USER_SESSION_TOKEN_JSON: boolean = true;
+
 export const RESPONSE_INVALID_LOGOUT_JSON: boolean = false;
 
-
-export const RESPONSE_INVALID_VERIFY_TOKEN_JSON: boolean =
-    false;
-
-export const RESPONSE_VALID_VERIFY_TOKEN_JSON: boolean =
-    true;
+export const RESPONSE_VALID_LOGOUT_JSON: boolean = true;
