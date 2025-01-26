@@ -15,7 +15,7 @@ export const loginGuard: CanActivateFn =  async (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
 
-  const isAuthenticated = await authService.isVerifyToken();
+  const isAuthenticated = await authService.isCheckUserSessionToken();
 
   if (isAuthenticated == true) {
       router.navigate(['/home']);

@@ -126,7 +126,7 @@ export class UserService {
    * @returns A promise that resolves to true if the user exists, false otherwise.
    *          Returns false if the request fails or if the user is not logged in.
    */
-  public async Exist(identifier: string | null | undefined): Promise<boolean> {
+  public async existUser(identifier: string | null | undefined): Promise<boolean> {
     try {
 
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(

@@ -50,7 +50,7 @@ export class AuthService {
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/user/twoFactorAuth`,
         null, httpOptionsParams));
 
-      this.verifyActiveUser(response);
+      this.notificationOfActiveUser(response);
 
     } catch (error) {
       this.notification.create('error', 'API', 'Desculpe,' +
@@ -65,7 +65,7 @@ export class AuthService {
    * If the response status is false, a warning notification is displayed with the response message.
    * @param response - The response object containing the status and message from the API.
    */
-  private verifyActiveUser(response: ResponseApi<null>): void {
+  private notificationOfActiveUser(response: ResponseApi<null>): void {
 
     if (response.success == true) {
       this.notification.create(
@@ -92,14 +92,14 @@ export class AuthService {
    */
   public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
 
-    if (!this.verifyEmailEmptyRecovery(createLogin.emailUserName)) return null;
+    if (!this.notificationEmailEmptyRecovery(createLogin.emailUserName)) return null;
 
     try {
 
       const response = await lastValueFrom(this.http.post<ResponseApi<null>>(`${this.apiUrl}/api/auth/recovery-account`,
         createLogin, this.httpOptions))
 
-      this.verifyRecoveryAccount(response);
+      this.checkRecoveryAccount(response);
 
       return response;
 
@@ -111,7 +111,7 @@ export class AuthService {
     }
   }
 
-  private verifyEmailEmptyRecovery(emailUserName: string): boolean {
+  private notificationEmailEmptyRecovery(emailUserName: string): boolean {
 
     if (emailUserName === '') {
       this.notification.create(
@@ -123,7 +123,7 @@ export class AuthService {
     }
 
     return true;
-
+    
   }
 
   /**
@@ -131,7 +131,7 @@ export class AuthService {
    * If the recovery process was successful, a success notification is displayed with instructions to check the email for a password reset link.
    * @param response - The response from the recovery account endpoint.
    */
-  private verifyRecoveryAccount(response: ResponseApi<null>): void {
+  private checkRecoveryAccount(response: ResponseApi<null>): void {
 
     if (response != null)
       this.notification.create(
@@ -195,7 +195,7 @@ export class AuthService {
    * @returns A promise that resolves to a boolean indicating whether the token is valid.
    *          Returns false if the request fails or if the token is invalid.
    */
-  public async isVerifyToken(): Promise<boolean> {
+  public async isCheckUserSessionToken(): Promise<boolean> {
     try {
 
       return await lastValueFrom(this.http.get<boolean>(

@@ -30,7 +30,7 @@ export class UserValidators {
 
     if (userName?.value.length > 12 || userName?.value.length < 6) return;
 
-    await this.userService.Exist(userName?.value) ?
+    await this.userService.existUser(userName?.value) ?
       (userName?.setErrors({ userNameExists: true })) : userName?.setErrors(null);
   }
 
@@ -46,7 +46,7 @@ export class UserValidators {
       return;
     }
 
-    await this.userService.Exist(email?.value) ?
+    await this.userService.existUser(email?.value) ?
       (email?.setErrors({ emailExists: true })) : email?.setErrors(null);
   }
 
