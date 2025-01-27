@@ -52,6 +52,42 @@ export class UserService {
       return false
     }
   }
+  
+    /**
+   * Displays a warning notification indicating that all user fields must be filled in.
+   */
+
+    private notificationInvalidUser(): void {
+      this.notification.create(
+        'warning',
+        'Usuário!',
+        'Preencha todos os campos'
+      );
+    }
+
+    /**
+   * Displays a notification based on the response status of the user registration.
+   * If the response status is true, a success notification is displayed with the response message.
+   * If the response status is false, a warning notification is displayed with the response message.
+   * Navigates the user to the login page if the response status is true.
+   * @param response - The response object containing the status and message from the API.
+   */
+    private notificationOfUserRegistration(response: ResponseApi<null>): void {
+
+      if (response.success === true) {
+        this.notification.create(
+          'success',
+          'Usuário!',
+          response.message,
+        );
+        this.router.navigate(['/login']);
+        return;
+      }
+      this.notification.create(
+        'warning',
+        'Usuário!',
+        response.message);
+    }
 
   /**
   * Finds the logged-in user by sending a GET request to the server.
@@ -81,43 +117,6 @@ export class UserService {
       return null;
     }
   }
-
-  /**
-   * Displays a warning notification indicating that all user fields must be filled in.
-   */
-
-  private notificationInvalidUser(): void {
-    this.notification.create(
-      'warning',
-      'Usuário!',
-      'Preencha todos os campos'
-    );
-  }
-
-  /**
-   * Displays a notification based on the response status of the user registration.
-   * If the response status is true, a success notification is displayed with the response message.
-   * If the response status is false, a warning notification is displayed with the response message.
-   * Navigates the user to the login page if the response status is true.
-   * @param response - The response object containing the status and message from the API.
-   */
-  private notificationOfUserRegistration(response: ResponseApi<null>): void {
-
-    if (response.success === true) {
-      this.notification.create(
-        'success',
-        'Usuário!',
-        response.message,
-      );
-      this.router.navigate(['/login']);
-      return;
-    }
-    this.notification.create(
-      'warning',
-      'Usuário!',
-      response.message);
-  }
-
 
   /**
    * Checks if a user exists by sending a POST request to the server.
