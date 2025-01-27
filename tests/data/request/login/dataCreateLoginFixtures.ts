@@ -7,7 +7,7 @@ export const REQUEST_CREATE_LOGIN_VALID_JSON:  CreateLogin = {
 }
 
 export const REQUEST_CREATE_LOGIN_INVALID_JSON: CreateLogin = {
-    emailUserName: "",
+    emailUserName: "H4H6o@example.com",
     password: "12345678",
     remember: true
 }

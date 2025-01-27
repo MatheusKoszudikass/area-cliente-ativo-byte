@@ -12,6 +12,12 @@ describe('CnpjService', () => {
     service = TestBed.inject(CnpjService);
   });
 
+  it('should invalidade a null CNPJ', () => {
+    const cnpj = null;
+    const result = service.validationCnpj(cnpj);
+    expect(result).toBeFalse();
+  });
+  
   it('should validate a valid CNPJ', () => {
     const cnpj = '57364766000172';
     const result = service.validationCnpj(cnpj);

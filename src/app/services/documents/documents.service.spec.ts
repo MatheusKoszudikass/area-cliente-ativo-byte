@@ -13,6 +13,10 @@ describe('DocumentsService', () => {
       service = TestBed.inject(DocumentsService);
     })
   describe('validationDocument', () => {
+    it('should return false if document is null', () => {
+      expect(service.validationDocumentCpfCnpj('CPF', null)).toBeFalse();
+    });
+    
     it('should return false if document is invalid CPF', () => {
       const invalidCpf = '1234567890';
       expect(service.validationDocumentCpfCnpj('CPF', invalidCpf)).toBeFalse();

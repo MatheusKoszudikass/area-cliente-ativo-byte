@@ -1,21 +1,20 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { inject, Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ResponseApi } from '../../interfaces/response-api.interface';
-import { ResponseLogin } from '../../interfaces/response-login.interface';
 import { CreateLogin } from '../../interfaces/create-login.interface';
 import { environment } from '../../../environments/environment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DOCUMENT, } from '@angular/common';
-import { CookiesService } from '../cookies/cookies.service';
-import { ResponseUserInterface } from '../../interfaces/response-user.interface';
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isLoggedIn: boolean = false;
+  private router = inject(Router);
+  private http = inject(HttpClient);
+  private notification = inject(NzNotificationService);
+  
   apiUrl: string = environment.apiLogin;
   httpOptions = {
     headers: new HttpHeaders({
@@ -23,10 +22,6 @@ export class AuthService {
     }),
     withCredentials: true
   };
-
-  constructor(@Inject(DOCUMENT) private document: Document,
-    private router: Router, private http: HttpClient,
-    private notification: NzNotificationService, private cookiesService: CookiesService) { }
 
   /**
    * Activates a user account using the provided token.
@@ -90,9 +85,9 @@ export class AuthService {
    * @param createLogin - An object containing the login details required for account recovery.
    * @returns A promise that resolves when the recovery process is complete.
    */
-  public async recoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
+  public async shippingEmailRecoveryAccount(createLogin: CreateLogin): Promise<ResponseApi<null> | null> {
 
-    if (!this.notificationEmailEmptyRecovery(createLogin.emailUserName)) return null;
+    if (!this.isNotificationEmailEmptyRecovery(createLogin.emailUserName)) return null;
 
     try {
 
@@ -111,7 +106,7 @@ export class AuthService {
     }
   }
 
-  private notificationEmailEmptyRecovery(emailUserName: string): boolean {
+  private isNotificationEmailEmptyRecovery(emailUserName: string): boolean {
 
     if (emailUserName === '') {
       this.notification.create(

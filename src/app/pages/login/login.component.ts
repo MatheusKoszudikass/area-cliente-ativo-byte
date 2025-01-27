@@ -120,7 +120,7 @@ export class LoginComponent {
 
     this.loginObj.emailUserName = this.formValidadeRecoveryAccount.value.email ?? '';
     
-    const response = await this.authService.recoveryAccount(this.loginObj);
+    const response = await this.authService.shippingEmailRecoveryAccount(this.loginObj);
 
     if(response){
       setTimeout(() => {

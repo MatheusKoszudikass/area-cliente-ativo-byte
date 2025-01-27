@@ -8,14 +8,18 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON,
 NOTIFICATION_INVALID_ACTIVE_USER_JSON, 
 NOTIFICATION_INVALID_LOGIN_JSON, 
+NOTIFICATION_INVALID_LOGOUT_JSON, 
 NOTIFICATION_VALID_ACTIVE_USER_JSON, 
+NOTIFICATION_VALID_AUTH_RECOVERY_JSON, 
 NOTIFICATION_VALID_LOGIN_JSON, 
-NOTIFICATION_VALID_LOGOUT_JSON, 
-NOTIFICATION_VALID_RECOVERY_JSON } from '../../../../tests/data/notification/auth/authNotificationFixture';
+NOTIFICATION_VALID_LOGOUT_JSON } from '../../../../tests/data/notification/auth/authNotificationFixture';
 import { RESPONSE_INVALID_ACTIVE_USER_JSON,
+  RESPONSE_INVALID_AUTH_RECOVERY_ACCOUNT_JSON,
   RESPONSE_INVALID_CHECK_USER_SESSION_TOKEN_JSON,
 RESPONSE_INVALID_LOGIN_JSON, 
-RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_CHECK_USER_SESSION_TOKEN_JSON, RESPONSE_VALID_LOGIN_JSON,
+RESPONSE_INVALID_LOGOUT_JSON, 
+RESPONSE_VALID_ACTIVE_USER_JSON, RESPONSE_VALID_AUTH_RECOVERY_ACCOUNT_JSON,
+RESPONSE_VALID_CHECK_USER_SESSION_TOKEN_JSON, RESPONSE_VALID_LOGIN_JSON,
 } from '../../../../tests/data/response/auth/authResponseDataFixtures';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RESPONSE_INVALID_API_JSON } from '../../../../tests/data/dataFixtures';
@@ -26,6 +30,8 @@ import { Router } from '@angular/router';
 import { RESPONSE_EMPTY_HEADERS_JSON, 
 RESPONSE_HEADERS_JSON,
 RESPONSE_HEADERS_TOKEN_SESSION_JSON } from '../../../../tests/dependencies/headers';
+import { RESPONSE_VALID_RECOVERY_ACCOUNT_JSON } from '../../../../tests/data/response/user/userResponseDataFixtures';
+import { REQUEST_INVALID_CREATE_USER_JSON } from '../../../../tests/data/request/user/dataCreateUserFixtures';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -111,8 +117,10 @@ describe('AuthService', () => {
       service.activeUser('validToken').catch((error) => {
         expect(error).toBeTruthy();
         expect(notificationMock.create).toHaveBeenCalledWith(
-
-        )
+          RESPONSE_INVALID_API_JSON.type,
+          RESPONSE_INVALID_API_JSON.title,
+          RESPONSE_INVALID_API_JSON.message
+        );
       });
 
       const request = httpMock.expectOne(req =>
@@ -128,16 +136,14 @@ describe('AuthService', () => {
       expect(request.request.headers.get('Content-Type')).toBe('application/json');
       expect(request.request.withCredentials).toBeTrue();
 
-      request.flush(
-        RESPONSE_INVALID_API_JSON.type
-      );
+      request.flush(null, { status:500, statusText: 'Internal Server Error' } );
     }));
   });
 
-  describe('recoveryAccount', () => {
+  describe('shippingEmailRecoveryAccount', () => {
     
     it('should show warning if email is not provided', fakeAsync(() => {
-      service.recoveryAccount(REQUEST_CREATE_LOGIN_JSON).then(response => {
+      service.shippingEmailRecoveryAccount(REQUEST_CREATE_LOGIN_JSON).then(response => {
         expect(response).toBeNull();
         expect(notificationMock.create).toHaveBeenCalledWith(
           NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON.type,
@@ -147,13 +153,40 @@ describe('AuthService', () => {
       });
     }));
 
-    it('should initiate account recovery with valid login details', fakeAsync(() => {
-      service.recoveryAccount(REQUEST_CREATE_LOGIN_VALID_JSON).then(response => {
-        expect(response).toBeNull();
+    it('should initiate account recovery with invalid email details', fakeAsync(() => {
+      service.shippingEmailRecoveryAccount(REQUEST_CREATE_LOGIN_INVALID_JSON).then(response => {
+        expect(response).toBe(RESPONSE_INVALID_AUTH_RECOVERY_ACCOUNT_JSON);
         expect(notificationMock.create).toHaveBeenCalledWith(
-          NOTIFICATION_VALID_RECOVERY_JSON.type,
-          NOTIFICATION_VALID_RECOVERY_JSON.title,
-          NOTIFICATION_VALID_RECOVERY_JSON.message
+          NOTIFICATION_VALID_AUTH_RECOVERY_JSON.type,
+          NOTIFICATION_VALID_AUTH_RECOVERY_JSON.title,
+          NOTIFICATION_VALID_AUTH_RECOVERY_JSON.message
+        );
+      });
+
+      const request = httpMock.expectOne(req =>
+        req.method === 'POST' &&
+        req.url === `${environment.apiLogin}/api/auth/recovery-account` &&
+        req.body === REQUEST_CREATE_LOGIN_INVALID_JSON &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('POST');
+      expect(request.request.body).toBe(REQUEST_CREATE_LOGIN_INVALID_JSON);
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+
+      request.flush(RESPONSE_INVALID_AUTH_RECOVERY_ACCOUNT_JSON);
+
+      flush();
+    }));
+
+    it('should initiate account recovery with valid email details', fakeAsync(() => {
+      service.shippingEmailRecoveryAccount(REQUEST_CREATE_LOGIN_VALID_JSON).then(response => {
+        expect(response).toBe(RESPONSE_VALID_AUTH_RECOVERY_ACCOUNT_JSON);
+        expect(notificationMock.create).toHaveBeenCalledWith(
+          NOTIFICATION_VALID_AUTH_RECOVERY_JSON.type,
+          NOTIFICATION_VALID_AUTH_RECOVERY_JSON.title,
+          NOTIFICATION_VALID_AUTH_RECOVERY_JSON.message
         );
       });
 
@@ -169,11 +202,13 @@ describe('AuthService', () => {
       expect(request.request.headers.get('Content-Type')).toBe('application/json');
       expect(request.request.withCredentials).toBeTrue();
       expect(request.request.headers.get('Set-Cookie')).toBeNull();
+
+      request.flush(RESPONSE_VALID_AUTH_RECOVERY_ACCOUNT_JSON);
       flush();
     }));
 
     it('should handle error during account recovery', fakeAsync(() => {
-      service.recoveryAccount(REQUEST_CREATE_LOGIN_VALID_JSON).then(error => {
+      service.shippingEmailRecoveryAccount(REQUEST_CREATE_LOGIN_VALID_JSON).then(error => {
         expect(error).toBeNull();
         expect(notificationMock.create).toHaveBeenCalledWith(
           RESPONSE_INVALID_API_JSON.type,
@@ -337,6 +372,32 @@ describe('AuthService', () => {
   });
 
   describe('logout', () => {
+
+    it('should logout user fail', fakeAsync(() => {
+      service.logout().then(error => {
+        expect(error).toBeUndefined();
+        expect(notificationMock.create).toHaveBeenCalledWith(
+          NOTIFICATION_INVALID_LOGOUT_JSON.type,
+          NOTIFICATION_INVALID_LOGOUT_JSON.title,
+          NOTIFICATION_INVALID_LOGOUT_JSON.message
+        );
+      });
+
+      const request = httpMock.expectOne(req =>
+        req.method === 'GET' &&
+        req.url === `${environment.apiLogin}/api/auth/logout` &&
+        req.headers.get('Content-Type') === 'application/json' &&
+        req.withCredentials === true
+      );
+      expect(request.request.method).toBe('GET');
+      expect(request.request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.request.withCredentials).toBeTrue();
+
+      request.flush(RESPONSE_INVALID_LOGOUT_JSON);
+      
+      flush();
+    }));
+
     it('should logout user successfully', fakeAsync(() => {
        service.logout().then(response => {
          expect(response).toBeUndefined();
@@ -383,4 +444,5 @@ describe('AuthService', () => {
       flush();
     }));
   });
+  
 });

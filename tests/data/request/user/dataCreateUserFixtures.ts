@@ -26,13 +26,13 @@ export const REQUEST_INVALID_CREATE_USER_JSON: CreateUserInterface = {
 };
 
 export const REQUEST_CREATE_USER_JSON: CreateUserInterface = {
-    email: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    cnpjCpfRg: '',
-    legalRegister: false,
-    userName: '',
+    email: "",
+    password: "12345678",
+    firstName: "Teste",
+    lastName: "Teste",
+    cnpjCpfRg: "12345678901",
+    legalRegister: true,
+    userName: "teste",
     roles: [],
     token: ''
 };

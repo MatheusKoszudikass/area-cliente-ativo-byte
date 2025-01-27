@@ -1,7 +1,7 @@
 import { ResponseApi } from "../../../../src/app/interfaces/response-api.interface";
 import { ResponseUserInterface } from "../../../../src/app/interfaces/response-user.interface";
 
-export const REPONSE_INVALID_ADD_USER_JSON: ResponseApi<null> = {
+export const RESPONSE_INVALID_ADD_USER_JSON: ResponseApi<null> = {
     success: false,
     message: "Usuário já existe",
     data: []
@@ -54,8 +54,16 @@ export const RESPONSE_INVALID_VERIFY_TOKEN_RECOVERY_ACCOUNT_JSON: boolean = fals
 
 export const RESPONSE_VALID_VERIFY_TOKEN_RECOVERY_ACCOUNT_JSON: boolean = true;
 
-export const RESPONSE_INVALID_RECOVERY_ACCOUNT_JSON: Boolean = true;
+export const RESPONSE_INVALID_RECOVERY_ACCOUNT_JSON: ResponseApi<any> = {
+    success: false,
+    message: "Token inválido.",
+    data: []
+};
 
-export const RESPONSE_VALID_RECOVERY_ACCOUNT_JSON: Boolean = false;
+export const RESPONSE_VALID_RECOVERY_ACCOUNT_JSON: ResponseApi<any> = {
+    success: true,
+    message: "Senha redefinida com sucesso.",
+    data: []
+};
 
 

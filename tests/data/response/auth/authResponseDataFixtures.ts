@@ -15,14 +15,14 @@ export const RESPONSE_INVALID_ACTIVE_USER_JSON: ResponseApi<null> =
     data: []
 };
 
-export const RESPONSE_VALID_RECOVERY_ACCOUNT_JSON: ResponseApi<null> =
+export const RESPONSE_VALID_AUTH_RECOVERY_ACCOUNT_JSON: ResponseApi<null> =
 {
-    "success": true,
-    "message": "Verifique seu e-mail!",
-    "data": []
+    success: true,
+    message: "Usuário já existe",
+    data: []
 };
 
-export const RESPONSE_INVALID_RECOVERY_ACCOUNT_JSON: ResponseApi<null> =
+export const RESPONSE_INVALID_AUTH_RECOVERY_ACCOUNT_JSON: ResponseApi<null> =
 {
     success: false,
     message: "Usuário nao encontrado",

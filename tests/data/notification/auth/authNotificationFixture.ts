@@ -12,20 +12,19 @@ export const NOTIFICATION_INVALID_ACTIVE_USER_JSON = {
   message: RESPONSE_INVALID_ACTIVE_USER_JSON.message
 };
 
-
 export const NOTIFICATION_EMAIL_EMPTY_RECOVERY_JSON = {
   type: 'warning',
   title: 'Usuário!',
   message: 'Insira um email'
 };
 
-export const NOTIFICATION_VALID_RECOVERY_JSON = {
+export const NOTIFICATION_VALID_AUTH_RECOVERY_JSON = {
   type: 'success',
-  title: 'Login bem-sucedido!',
-  message: 'Login efetuado com sucesso!'
+  title: 'Recuperação bem-sucedida',
+  message: 'Verifique seu email para redefinir sua senha'
 };
 
-export const NOTIFICATION_INVALID_RECOVERY_JSON = {
+export const NOTIFICATION_INVALID_AUTH_RECOVERY_JSON = {
   type: 'success',
   title: 'Recuperação bem-sucedida',
   message: 'Verifique seu email para redefinir sua senha'
@@ -52,5 +51,5 @@ export const NOTIFICATION_VALID_LOGOUT_JSON = {
 export const NOTIFICATION_INVALID_LOGOUT_JSON = {
   type: 'error',
   title: 'Não foi possível efetuar o logout',
-  message: 'Logout efetuado com sucesso!'
+  message: 'Desculpe, não foi possível efetuar o logout'
 }
