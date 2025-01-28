@@ -4,14 +4,14 @@ import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './guard/auth/auth.guard';
-import { loginGuard } from './guard/login/login.guard';
 import { AddUserComponent } from './pages/add-user/add-user.component';
 import { ProfileUserComponent } from './pages/profile-user/profile-user.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { resetPasswordGuard } from './guard/reset-password/reset-password.guard';
+import { loginGuard } from './guard/login/login.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full'}, // Redireciona para login por padrão
+  { path: '', redirectTo: 'home', pathMatch: 'full'},
   
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] }, 
   
@@ -31,7 +31,6 @@ export const routes: Routes = [
     ],
     canActivate: [authGuard]
   },
-  { path: '**', redirectTo: '/login' } 
-
+  { path: '**', redirectTo: '/login' }
 ];
 

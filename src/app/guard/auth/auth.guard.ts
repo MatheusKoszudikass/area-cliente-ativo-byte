@@ -18,10 +18,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
 
-  if (await authService.isCheckUserSessionToken() === true) {
-      return true;
-  } else {
-    router.navigate(['/login']);
-    return false; // Bloqueia a navegação
-  }
+  return await authService.isCheckUserSessionToken()? true 
+  : (router.navigate(['/login']));
 };

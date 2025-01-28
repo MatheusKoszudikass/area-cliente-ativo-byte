@@ -6,8 +6,8 @@ export const resetPasswordGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
   const userService = inject(UserService);
 
-  const token = route.queryParamMap.get('token') ?? '';
+  const token = route.queryParamMap.get('token');
 
-  return (await userService.verifyTokenRecoveryAccount
-  (token)) ? true : (router.navigate(['/login']), false); 
+  return await userService.verifyTokenRecoveryAccount
+  (token) ? true : (router.navigate(['/login']));   
 };

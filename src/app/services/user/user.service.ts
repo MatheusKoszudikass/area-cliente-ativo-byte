@@ -150,7 +150,7 @@ export class UserService {
    * @returns A promise that resolves when the verification process is complete.
    *          Returns null if the request fails or if the user is not logged in.
    */
-  public async verifyTokenRecoveryAccount(token: string): Promise<boolean>
+  public async verifyTokenRecoveryAccount(token: string | null): Promise<boolean>
   {
     try
     {
