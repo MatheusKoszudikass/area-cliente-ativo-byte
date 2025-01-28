@@ -30,8 +30,6 @@ import { Router } from '@angular/router';
 import { RESPONSE_EMPTY_HEADERS_JSON, 
 RESPONSE_HEADERS_JSON,
 RESPONSE_HEADERS_TOKEN_SESSION_JSON } from '../../../../tests/dependencies/headers';
-import { RESPONSE_VALID_RECOVERY_ACCOUNT_JSON } from '../../../../tests/data/response/user/userResponseDataFixtures';
-import { REQUEST_INVALID_CREATE_USER_JSON } from '../../../../tests/data/request/user/dataCreateUserFixtures';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -42,7 +40,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, NoopAnimationsModule],
-      providers: [provideHttpClient(), AuthService, provideHttpClientTesting(), {
+      providers: [provideHttpClient(), provideHttpClientTesting(), {
         provide: NzNotificationService,
         useValue: notificationMock
       },
@@ -325,7 +323,9 @@ describe('AuthService', () => {
       expect(request.request.method).toBe('GET');
       expect(request.request.headers.get('Content-Type')).toBe('application/json');
       expect(request.request.withCredentials).toBeTrue();
-      request.flush(RESPONSE_VALID_CHECK_USER_SESSION_TOKEN_JSON, {headers: RESPONSE_HEADERS_JSON});
+
+      request.flush(RESPONSE_VALID_CHECK_USER_SESSION_TOKEN_JSON, {headers: RESPONSE_EMPTY_HEADERS_JSON});
+
       flush();
     }));
 

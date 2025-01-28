@@ -1,17 +1,53 @@
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
-
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { authGuard } from '../auth/auth.guard';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth/auth.service';
 
 describe('authGuard', () => {
+  let authServiceMock: jasmine.SpyObj<AuthService>;
+  let routerMock: jasmine.SpyObj<Router>;
+  
   const executeGuard: CanActivateFn = (...guardParameters) => 
       TestBed.runInInjectionContext(() => authGuard(...guardParameters));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    authServiceMock = jasmine.createSpyObj<AuthService>('AuthService', ['isCheckUserSessionToken']);
+    routerMock = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    TestBed.configureTestingModule({
+      providers: [ 
+        { 
+          provide: AuthService, 
+          useValue: authServiceMock 
+
+        }, 
+        { 
+          provide: Router,
+          useValue: routerMock 
+        }]
+    });
   });
 
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
+  it('should redirect to /home if the user is authenticated', async () => {
+    authServiceMock.isCheckUserSessionToken.and.resolveTo(true);
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {url: '/'} as any;
+    routerMock.navigate.and.resolveTo(true);
+    const result = await executeGuard(route, state) as boolean;
+    
+    expect(result).toBeTrue();
+    expect(routerMock.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should redirect to login if the user is not authenticated', async () => {
+    authServiceMock.isCheckUserSessionToken.and.resolveTo(false);
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {url: '/'} as any;
+    routerMock.navigate.and.resolveTo(false);
+    const result = await executeGuard(route, state) as boolean;
+    
+    expect(result).toBeFalse();
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
   });
 });
