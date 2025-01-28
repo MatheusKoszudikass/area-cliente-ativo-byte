@@ -74,6 +74,7 @@ export class AuthService {
         'Usuário!',
         response.message
       );
+      this.router.navigate(['/login']);
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { ActivatedRoute, Router  } from '@angular/router';
 import { timeInterval } from 'rxjs';
@@ -11,14 +11,17 @@ import { timeInterval } from 'rxjs';
     styleUrl: './active-user.component.scss'
 })
 export class ActiveUserComponent {
- constructor(private authService: AuthService, private routerActive: ActivatedRoute, private router: Router ) { }
+  private authService = inject(AuthService);
+  private routerActive = inject(ActivatedRoute);
+  private router = inject(Router);
 
  async ngOnInit(): Promise<void> {
+   await this.ativeUser();
+ }
+
+  ativeUser = async () => {
   const token = this.routerActive.snapshot.queryParamMap.get('token');
 
   if(token != null) await this.authService.activeUser(token);
-  setTimeout(() => {
-    this.router.navigate(['/login']);
-  }, 3000);
  }
 }
