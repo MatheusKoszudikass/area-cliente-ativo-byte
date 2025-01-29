@@ -13,20 +13,12 @@ export class UserValidators {
 
   private documentsService = inject(DocumentsService);
 
-  public emailVerified: string = '';
-
-  public userNameVerified: string = '';
-
   private fb = inject(FormBuilder);
 
   private emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   userExists = async (): Promise<void> => {
     const userName = this.validateForm.get('userName');
-
-    if (userName?.value === this.userNameVerified) return;
-
-    this.userNameVerified = userName?.value;
 
     if (userName?.value.length > 12 || userName?.value.length < 6) return;
 
@@ -36,10 +28,6 @@ export class UserValidators {
 
   emailValidator = async (): Promise<void> => {
     const email = this.validateForm.get('email');
-
-    if (email?.value === this.emailVerified) return;
-
-    this.emailVerified = email?.value;
 
     if (!this.emailRegex.test(email?.value)) {
       email?.setErrors({ email: true });
@@ -59,14 +47,11 @@ export class UserValidators {
       const password = this.validateForm.get('password')?.value;
       const confirmPassword = control.value;
 
-      if (!password || !confirmPassword) {
-        return null;
-      }
+      if (!password || !confirmPassword) return null;
 
-      if (password !== confirmPassword) {
-        return { passwordMismatch: true };
-      }
 
+      if (password !== confirmPassword) return { passwordMismatch: true };
+  
       return null;
     };
   }

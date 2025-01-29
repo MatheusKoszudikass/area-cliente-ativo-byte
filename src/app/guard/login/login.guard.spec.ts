@@ -32,7 +32,7 @@ describe('loginGuard', () => {
      
     const result = await executeGuard(route, state);
 
-    expect(result).toBe(true);
+    expect(result).toBeFalse();
     expect(routerMock.navigate).toHaveBeenCalledWith(['/home']);
   });
 
@@ -43,7 +43,7 @@ describe('loginGuard', () => {
 
     const result = await executeGuard(route, state);
 
-    expect(result).toBe(false);
+    expect(result).toBeTrue();
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 });

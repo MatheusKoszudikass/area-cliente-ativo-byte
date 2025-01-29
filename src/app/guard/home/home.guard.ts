@@ -14,7 +14,7 @@ import { AuthService } from '../../services/auth/auth.service';
  *          otherwise resolves to false after redirecting to login.
  */
 
-export const authGuard: CanActivateFn = async (route, state) => {
+export const homeGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
 

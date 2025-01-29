@@ -86,7 +86,5 @@ export class AddUserComponent {
     this.userValidators.validateForm.get('confirmPassword')?.setValue('');
     this.userValidators.validateForm.get('userName')?.setValue('');
     this.userValidators.validateForm.get('email')?.setValue('');
-    this.userValidators.emailVerified = '';
-    this.userValidators.userNameVerified = '';
   }
 }

@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { authGuard } from '../auth/auth.guard';
+import { homeGuard } from './home.guard';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth/auth.service';
 
-describe('authGuard', () => {
+describe('homeGuard', () => {
   let authServiceMock: jasmine.SpyObj<AuthService>;
   let routerMock: jasmine.SpyObj<Router>;
   
   const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => authGuard(...guardParameters));
+      TestBed.runInInjectionContext(() => homeGuard(...guardParameters));
 
   beforeEach(() => {
     authServiceMock = jasmine.createSpyObj<AuthService>('AuthService', ['isCheckUserSessionToken']);

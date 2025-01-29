@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth/auth.service';
 export const loginGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
-
-  return await authService.isCheckUserSessionToken() ? (router.navigate(['/home'])) 
-  : false;
+  
+  return await authService.isCheckUserSessionToken() ? (router.navigate(['/home']), false) 
+  : (true);
 };
